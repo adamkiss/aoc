@@ -1,0 +1,15 @@
+# hihihi
+.DS_Store
+
+# Files and directories created by pub.
+.dart_tool/
+.packages
+
+# Conventional directory for build output.
+build/
+!build/.gitkeep
+bin
+
+# Inputs
+inputs/*
+!inputs/.gitkeep
