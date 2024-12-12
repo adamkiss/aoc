@@ -1,0 +1,29 @@
+{
+	"name": "adamkiss/advent-of-code-2021",
+	"description": "Advent of Code 2021",
+	"type": "project",
+	"homepage": "https://adamkiss.com",
+	"authors": [
+		{
+			"name": "Adam Kiss"
+		}
+	],
+	"require": {
+		"php": ">=8.0.0",
+		"getkirby/cms": "^4.5"
+	},
+	"autoload": {
+		"files": [
+			"_utils.php"
+		]
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"allow-plugins": {
+			"getkirby/composer-installer": true
+		}
+	},
+	"extra": {
+		"kirby-cms-path": false
+	}
+}

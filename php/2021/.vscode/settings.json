@@ -1,0 +1,6 @@
+{
+    "advancedNewFile.exclude": {
+		"/kirby": true,
+		"/vendor": true,
+    },
+}
