@@ -1,0 +1,9 @@
+{
+  "name": "advent-of-code-2024",
+  "version": "1.0.0",
+  "description": "Advent of Code 2024, solved via PHP with Kirby Toolkit.",
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "private"
+}

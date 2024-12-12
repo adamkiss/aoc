@@ -1,0 +1,29 @@
+{
+	"name": "adamkiss/advent-of-code-2024",
+	"description": "Advent of Code 2024",
+	"type": "project",
+	"homepage": "https://aoc24.adamkiss.com",
+	"authors": [
+		{
+			"name": "Adam Kiss"
+		}
+	],
+	"require": {
+		"php": ">=8.0.0",
+		"getkirby/cms": "^4.4"
+	},
+	"autoload": {
+		"files": [
+			"_utils.php"
+		]
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"allow-plugins": {
+			"getkirby/composer-installer": true
+		}
+	},
+	"extra": {
+		"kirby-cms-path": false
+	}
+}
