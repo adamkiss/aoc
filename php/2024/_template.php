@@ -19,8 +19,10 @@ $s = microtime(true);
 
 // 1
 $p = microtime(true);
-println('1) Result of demo: ' . part1($input_demo));
+$r = part1($input_demo);
+println('1) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+assert($r, 1);
 
 $p = microtime(true);
 println('1) Result of real input: ' . part1($input));
@@ -28,8 +30,10 @@ printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 // 2
 $p = microtime(true);
-println('2) Result of demo: ' . part2($input_demo));
+$r = part2($input_demo);
+println('2) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+assert($r, 1);
 
 $p = microtime(true);
 println('2) Result of real input: ' . part2($input));
