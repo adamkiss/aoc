@@ -1,9 +1,10 @@
 <?php
 
+use Kirby\Toolkit\A;
 use Kirby\Toolkit\Str;
 
 require_once __DIR__ . '/vendor/autoload.php';
-
+// DEAFGBC
 $input = read_input();
 $input_demo = <<<INPUT
 be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
@@ -54,89 +55,98 @@ const NUMBERS = [
 	'cf' => 1,
 	'acdeg' => 2,
 	'acdfg' => 3,
-	'bcfg' => 4,
+	'bcdf' => 4,
 	'abdfg' => 5,
 	'abdefg' => 6,
 	'acf' => 7,
 	'abcdefg' => 8,
 	'abcdfg' => 9,
 ];
-const NUMBERS_LENGTH = [
-	0 => [],
-	1 => [],
-	2 => [1],
-	3 => [7],
-	4 => [4],
-	5 => [2, 3, 5],
-	6 => [0, 6, 9],
-	7 => [8],
-	8 => [],
+const SEGMENTS = [
+	0 => ['a', 'b', 'c', 'e', 'f', 'g'],
+	1 => ['c', 'f'],
+	2 => ['a', 'c', 'd', 'e', 'g'],
+	3 => ['a', 'c', 'd', 'f', 'g'],
+	4 => ['b', 'c', 'd', 'f'],
+	5 => ['a', 'b', 'd', 'f', 'g'],
+	6 => ['a', 'b', 'd', 'e', 'f', 'g'],
+	7 => ['a', 'c', 'f'],
+	8 => ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
+	9 => ['a', 'b', 'c', 'd', 'f', 'g'],
 ];
 
-function p2_map_digit(array $map, array $digit): int {
-	$rot = array_map(
-		fn ($d) => $map[$d],
-		$digit
-	);
-	sort($rot);
-	$r = join('', $rot);
-	if (strlen($r) > 5) {
-		ray($digit, $map, $rot, NUMBERS[$r] ?? -1);
-	}
-	return NUMBERS[$r] ?? -1;
+function array_exclude(array $array, array $exclude): array {
+	return array_values(array_filter($array, fn($el) => !in_array($el, $exclude)));
 }
-
-function p2_permutations() {
-	$perms = [
-		0 => ['']
-	];
-	for ($i=1; $i <= 7; $i++) {
-		$perms[$i] = [];
-		foreach ($perms[$i-1] as $prev) {
-			foreach (PARTS as $letter) {
-				$perms[$i] []= "$prev$letter";
-			}
-		}
-	}
-	return $perms[7];
+function array_filter_v(array $array, callable $callback): array {
+	return array_values(array_filter($array, $callback));
+}
+function av(array $array): array {
+	return array_values($array);
+}
+function array_contains(array $array, array $contains): bool {
+	return count(array_intersect($array, $contains)) === count($contains);
 }
 
 function p2_calc_line(array $digits, array $output): int
 {
+	/*
+	  A
+	B   C
+	  D
+	E   F
+	  G
+	*/
 	usort($digits, fn($a, $b) => Str::length($a) <=> Str::length($b));
 	$digits = array_map(str_split(...), $digits);
-	$f = null;
 
-	$t = 0;
+	$m = [
+		'a' => null,
+		'b' => null,
+		'c' => null,
+		'd' => null,
+		'e' => null,
+		'f' => null,
+		'g' => null,
+	];
+	$one = A::find($digits, fn($d) => count($d) === 2);
+	$four = A::find($digits, fn($d) => count($d) === 4);
+	$seven = A::find($digits, fn($d) => count($d) === 3);
+	$eight = A::find($digits, fn($d) => count($d) === 7);
 
-	foreach (p2_permutations() as $perm) {
-		$p = str_split($perm);
-		if (count(array_unique($p)) !== count($p)) {
-			continue;
-		}
-		if ($perm === 'deafgbc') {
-			rd('?');
-		}
-		println();
-		print($perm. '=>');
-		$p = array_combine($p, ['a', 'b', 'c', 'd', 'e', 'f', 'g']);
-		// ksort($p);
-		// cagedb
-		// dcebaf
+	// A = 7-1
+	$m['a'] = array_exclude($seven, $one)[0];
 
-		foreach ($digits as $digit) {
-			$nr = p2_map_digit($p, $digit);
-			print(' '.$nr);
-			if ($nr < 0) {
-				continue 2;
-			}
+	$bd = array_diff($four, $one);
+	$five = array_filter_v(
+		$digits,
+		fn($d) => count($d) === 5 && array_contains($d, $bd)
+	)[0];
+	$m['f'] = av(array_intersect($five, $one))[0];
+
+	$almost_nine = array_merge($four, [$m['a']]);
+	$nine = av(array_filter($digits, fn($d) => count($d) === 6 && count(array_diff($d, $almost_nine)) === 1))[0];
+	$m['g'] = av(array_diff($nine, $almost_nine))[0];
+
+	$m['c'] = av(array_diff($one, [$m['f']]))[0];
+	$three = av(array_filter($digits, fn($d) => count($d) === 5 && count(array_intersect($d, $m)) === 4))[0];
+	$m['d'] = av(array_diff($three, $m))[0];
+	$m['b'] = av(array_diff($bd, [$m['d']]))[0];
+	$m['e'] = av(array_diff($eight, $m))[0];
+
+	// !!!!!
+	$m = array_flip($m);
+
+	$r = '';
+	foreach ($output as $i => $digit) {
+		$d = [];
+		foreach (str_split($digit) as $i => $char) {
+			$d []= $m[$char];
 		}
-		rd($p, $t);
-		$f = $p;
-		break;
+		sort($d);
+		$r .= NUMBERS[implode('', $d)] ?? 'X';
 	}
-
-	return 0;
+	return intval($r);
 }
 
 function part2 (string $input) {
@@ -165,7 +175,7 @@ $p = microtime(true);
 $r = part2($input_simple);
 println('2) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
-assert($r === 5335);
+assert($r === 5353);
 
 $p = microtime(true);
 $r = part2($input_demo);
