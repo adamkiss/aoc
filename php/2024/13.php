@@ -56,6 +56,31 @@ function process_input(string $input) : array {
 	return $machines;
 }
 
+function process_input_no_regex(string $input) : array {
+	$machines = explode("\n\n", $input);
+	foreach ($machines as $i => $m) {
+		$nrs = [];
+		$j = 0;
+		foreach (str_split($m) as $ch) {
+			if ($ch === '+' || $ch==='=') {
+				$nrs[$j] = [];
+				continue;
+			}
+			if ($ch === ',' || $ch==="\n") {
+				$j++;
+				continue;
+			}
+			if (!is_numeric($ch)) {
+				continue;
+			}
+
+			$nrs[$j] []= $ch;
+		}
+		$machines[$i] = array_map(fn($n) => intval(join('', $n)), $nrs);
+	}
+	return $machines;
+}
+
 function solve_machine_naive($ax, $ay, $bx, $by, $px, $py) {
 	$maxa = (int)floor(max($px / $ax, $py / $ay));
 	$maxb = (int)floor(max($px / $bx, $py / $by));
