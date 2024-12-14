@@ -1,7 +1,9 @@
 <?php
 
+use Kirby\Toolkit\A;
+
 require_once __DIR__ . '/vendor/autoload.php';
-$input = trim(file_get_contents(__DIR__ . '/inputs/' . basename(__FILE__, 'php') . 'txt'));
+$input = read_input();
 $demoinput1 = <<<INPUT
 ...0...
 ...1...

@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-$input = trim(file_get_contents(__DIR__ . '/inputs/' . basename(__FILE__, 'php') . 'txt'));
+$input = read_input();
 $dinput = <<<INPUT
 125 17
 INPUT;
