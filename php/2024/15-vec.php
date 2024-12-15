@@ -1,6 +1,5 @@
 <?php
 
-use Ds\Map;
 use Ds\Set;
 use Kirby\Toolkit\A;
 
@@ -44,10 +43,10 @@ $input_small = <<<INPUT
 INPUT;
 
 const DIRS = [
-	'>' => [1, 0],
-	'<' => [-1, 0],
-	'v' => [0, 1],
-	'^' => [0, -1]
+	'>' => new Vec2(1, 0),
+	'<' => new Vec2(-1, 0),
+	'v' => new Vec2(0, 1),
+	'^' => new Vec2(0, -1)
 ];
 
 function print_map_raw(array $map, ?int $x = null, ?int $y = null): string {
@@ -67,20 +66,6 @@ function print_map(array $map, ?int $x = null, ?int $y = null) {
 	println();
 }
 
-function print_ds_map(Map $m, ?int $x = null, ?int $y = null) {
-	$ll = -1;
-	foreach ($m as $k => $v) {
-		if ($k[1] > $ll) {
-			println();
-			$ll = $k[1];
-		}
-		if ($x && $y && $k === [$x,$y]) {
-			print 'X';
-		} else {
-			print $v;
-		}
-	}
-}
 
 function process_input(string $input): array {
 	[$map_raw, $moves_raw] = explode("\n\n", $input);
@@ -94,49 +79,32 @@ function process_input(string $input): array {
 
 function process_input2(string $input): array {
 	[$map_raw, $moves_raw] = explode("\n\n", $input);
-	$map = new Map();
-
-	$w = 1;
-	$h = 1;
-	$bx = -1;
-	$by = -1;
-	foreach (explode("\n", $map_raw) as $y => $line) {
-		$h++;
-		foreach (str_split(str_replace(
+	$map = array_map(
+		array: explode("\n", $map_raw),
+		callback: fn($line) => str_split(str_replace(
 			['#', 'O', '.', '@'],
 			['##', '[]', '..', '@.'],
 			$line
-		)) as $x => $ch) {
-			$w++;
-			$map[[$x,$y]] = $ch;
-			if ($ch === '@') {
-				$bx = $x;
-				$by = $y;
-			}
-		}
-	}
+		))
+	);
 	$moves = str_split(str_replace("\n", '', $moves_raw));
-	return [$map, $moves, $w, $h, $bx, $by];
+	return [$map, $moves];
 }
 
-function vec_add(int $x1, int $y1, int $x2, int $y2): array {
-	return [$x1 + $x2, $y1 + $y2];
-}
-
-function move_simple(array &$map, int $x, int $y, $dir, int $i) : bool {
-	[$nx, $ny] = vec_add($x, $y, $dir[0], $dir[1]);
-	if ($map[$ny][$nx] === '#') {
+function move_simple(array &$map, Vec2 $pos, Vec2 $d, int $i) : bool {
+	$n = $pos->cl_a($d);
+	if ($map[$n->y][$n->x] === '#') {
 		return false;
 	}
-	$canmove = $map[$ny][$nx] === 'O'
-		? move_simple($map, $nx, $ny, $dir, $i+1)
+	$canmove = in_array($map[$n->y][$n->x], ['O', '[', ']'])
+		? move_simple($map, $n, $d, $i+1)
 		: true;
 
 	if (! $canmove) {
 		return false;
 	}
 
-	$map[$ny][$nx] = $map[$y][$x];
+	$map[$n->y][$n->x] = $map[$pos->y][$pos->x];
 	return true;
 }
 
@@ -146,24 +114,21 @@ function part1 (string $input) {
 	$h = count($map);
 	$w = count($map[0]);
 
-	$bx = -1;
-	$by = -1;
 	for ($i=0; $i < $h; $i++) {
 		for ($j=0; $j < $w; $j++) {
 			if ($map[$i][$j] !== '@') {
 				continue;
 			}
-			$bx = $j;
-			$by = $i;
+			$b = new Vec2($j, $i);
 			break 2;
 		}
 	}
 
 	foreach ($moves as $move) {
-		$moved = move_simple($map, $bx, $by, DIRS[$move], 0);
+		$moved = move_simple($map, $b, DIRS[$move], 0);
 		if ($moved) {
-			$map[$by][$bx] = '.';
-			[$bx, $by] = vec_add($bx, $by, DIRS[$move][0], DIRS[$move][1]);
+			$map[$b->y][$b->x] = '.';
+			$b->add(DIRS[$move]);
 		}
 	}
 
@@ -181,27 +146,10 @@ function part1 (string $input) {
 	return $sum;
 }
 
-function p2moveh(Map &$m, int $x, int $y, $dir, int $i) : bool {
-	[$nx, $ny] = vec_add($x, $y, $dir[0], $dir[1]);
 
-	if ($m[[$nx,$ny]] === '#') {
-		return false;
-	}
-	$canmove = ($m[[$nx,$ny]] === ']' || $m[[$nx,$ny]] === '[')
-		? p2moveh($m, $nx, $ny, $dir, $i+1)
-		: true;
-
-	if (! $canmove) {
-		return false;
-	}
-
-	$m[[$nx,$ny]] = $m[[$x,$y]];
-	return true;
-}
-
-function move_p2v(Map $m, int $x, int $y, $d, int $i) : Set|bool {
-	$ch = $m[[$x,$y]];
-
+function move_p2v(array $map, Vec2 $pos, $d, int $i) : array|bool {
+	$n = $pos->cl_a($d);
+	$ch = $map[$n->y][$n->x];
 	if ($ch === '#') {
 		return false;
 	}
@@ -210,82 +158,90 @@ function move_p2v(Map $m, int $x, int $y, $d, int $i) : Set|bool {
 		return true;
 	}
 
-	$fhalf = move_p2v($m, $x, $y + $d[1], $d, $i + 1);
+	$fhalf = move_p2v($map, $n, $d, $i + 1);
 	if ($fhalf === false) {
 		return false;
 	}
 
 	$shalf = ($ch === ']')
-		? move_p2v($m, $x-1, $y + $d[1], $d, $i + 1)
-		: move_p2v($m, $x+1, $y + $d[1], $d, $i + 1);
+		? move_p2v($map, $n->cl_ai(-1, 0), $d, $i + 1)
+		: move_p2v($map, $n->cl_ai(+1, 0), $d, $i + 1);
 
 	if ($fhalf === false || $shalf === false) {
 		return false;
 	}
 
-	$self = $m[[$x,$y]] === ']'
-		? new Set([[$x-1, $y]])
-		: new Set([[$x, $y]]);
+	$self = $ch === ']'
+		? [$n->addi(-1, 0)]
+		: [$n];
 
-	ray([$self, $shalf, $fhalf]);
+	if ($shalf === true && $fhalf === true) {
+		return $self;
+	}
 
-	$self = ($fhalf !== true) ? $self->union($fhalf) : $self;
-	$self = ($shalf !== true) ? $self->union($shalf) : $self;
-
-	return $self;
+	return array_merge(is_array($fhalf) ? $fhalf : [], is_array($shalf) ? $shalf : [], $self);
 }
 
 function part2 (string $input) {
-	[$map, $moves, $w, $h, $bx, $by] = process_input2($input);
+	[$map, $moves] = process_input2($input);
+
+	$h = count($map);
+	$w = count($map[0]);
+
+	for ($i=0; $i < $h; $i++) {
+		for ($j=0; $j < $w; $j++) {
+			if ($map[$i][$j] !== '@') {
+				continue;
+			}
+			$b = new Vec2($j, $i);
+			break 2;
+		}
+	}
 
 	foreach ($moves as $move) {
 		$d = DIRS[$move];
 
-		// println($move, ...$d);
-		// print_ds_map($map);
-		// readline();
-
 		if ($move === '<' || $move === '>') {
-			$moved = p2moveh($map, $bx, $by, $d, 0);
+			$moved = move_simple($map, $b, $d, 0);
 			if ($moved) {
-				$map[[$bx,$by]] = '.';
-				[$bx, $by] = vec_add($bx, $by, $d[0], $d[1]);
+				$map[$b->y][$b->x] = '.';
+				$b->add($d);
 			}
 			continue;
 		}
 
-		[$nx, $ny] = vec_add($bx, $by, $d[0], $d[1]);
-		$nextmove = move_p2v($map, $nx, $ny, $d, 0);
+		$to_move = move_p2v($map, $b, $d, 0);
 
-		if ($nextmove === false) {
+		if ($to_move === false) {
 			continue;
 		}
 
-		if ($nextmove !== true) {
-			$nextmove->sort(fn ($a, $b) => $d[1] === -1 ? $a <=> $b : $b <=> $a);
-			foreach ($nextmove as [$boxx, $boxy]) {
-				[$_, $movy] = vec_add($boxx, $boxy, $d[0], $d[1]);
-				$map[[$boxx+0, $movy]] = '[';
-				$map[[$boxx+1, $movy]] = ']';
-				$map[[$boxx+0, $boxy]] = '.';
-				$map[[$boxx+1, $boxy]] = '.';
+		if ($to_move !== true) {
+			$unique = (new Set($to_move))->toArray();
+			foreach ($unique as $box) {
+				$map[$box->y][$box->x+0] = '.';
+				$map[$box->y][$box->x+1] = '.';
+				$box->add($d);
+				$map[$box->y][$box->x+0] = '[';
+				$map[$box->y][$box->x+1] = ']';
 			}
 		}
 
-		$map[[$bx,$by]] = '.';
-		$by = $ny;
-		$map[[$bx,$by]] = '@';
+		$map[$b->y][$b->x] = '.';
+		$b->add($d);
+		$map[$b->y][$b->x] = '@';
 	}
 
-	// var_dump($map);
-	print_ds_map($map);
+	// print_map($map);
 
 	$sum = 0;
-	foreach ($map as $k => $v) {
-		if ($v !== '[') {
-			continue;
+	for ($i=0; $i < $h; $i++) {
+		for ($j=0; $j < $w; $j++) {
+			if ($map[$i][$j] !== '[') {
+				continue;
+			}
+			$sum += $i * 100 + $j;
 		}
-		$sum += $k[1] * 100 + $k[0];
 	}
 
 	return $sum;

@@ -14,7 +14,8 @@
 	},
 	"autoload": {
 		"files": [
-			"_utils.php"
+			"_utils.php",
+			"classes/Vec2.php"
 		]
 	},
 	"config": {
