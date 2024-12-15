@@ -194,13 +194,15 @@ function p2checkv(array $map, int $x, int $y, $dir, int $i) : array|bool {
 		return false;
 	}
 
-	if ($fhalf === true && $shalf === true) {
-		return $map[$ny][$nx] === ']'
-			? [[$nx-1, $ny]]
-			: [[$nx, $ny]]
+	$self = $map[$ny][$nx] === ']'
+		? [[$nx-1, $ny]]
+		: [[$nx, $ny]];
+
+	if ($shalf === true && $fhalf === true) {
+		return $self;
 	}
 
-	return array_unique(array_merge($fhalf, $shalf));
+	return array_merge(is_array($fhalf) ? $fhalf : [], is_array($shalf) ? $shalf : [], $self);
 }
 
 function part2 (string $input) {
@@ -224,6 +226,7 @@ function part2 (string $input) {
 
 	foreach ($moves as $move) {
 		$d = DIRS[$move];
+
 		if ($move === '<' || $move === '>') {
 			$moved = p2moveh($map, $bx, $by, $d, 0);
 			if ($moved) {
@@ -237,14 +240,22 @@ function part2 (string $input) {
 
 		if ($canmove === false) {
 			continue;
-		} else if ($canmove === true) {
-			$map[$by][$bx] = '.';
-			[$bx, $by] = vec_add($bx, $by, $d[0], $d[1]);
-			$map[$by][$bx] = '@';
-			continue;
 		}
 
-		rd($canmove);
+		if (is_array($canmove)) {
+			$unique = (new Set($canmove))->toArray();
+			foreach ($unique as [$boxx, $boxy]) {
+				[$movx, $movy] = vec_add($boxx, $boxy, $d[0], $d[1]);
+				$map[$movy][$movx+0] = '[';
+				$map[$movy][$movx+1] = ']';
+				$map[$boxy][$boxx+0] = '.';
+				$map[$boxy][$boxx+1] = '.';
+			}
+		}
+
+		$map[$by][$bx] = '.';
+		[$bx, $by] = vec_add($bx, $by, $d[0], $d[1]);
+		$map[$by][$bx] = '@';
 	}
 
 	print_map($map);
@@ -287,8 +298,8 @@ println('2) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 9021);
 
-// $p = microtime(true);
-// println('2) Result of real input: ' . part2($input));
-// printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+$p = microtime(true);
+println('2) Result of real input: ' . part2($input));
+printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
