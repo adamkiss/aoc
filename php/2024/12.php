@@ -101,7 +101,7 @@ function map_plot(&$map, $x, $y, $w, $h, &$plots, $pid): void {
 		// $map[$ny][$nx]['edges'] = count_edges($nx, $ny, $w, $h);
 		$plots[$pid]['size'] += 1;
 		// $plots[$pid]['perimeter'] += count_edges($nx, $ny, $w, $h);
-		$plots[$pid]['cells'] [] = [$nx, $ny];
+		// $plots[$pid]['cells'] [] = [$nx, $ny];
 		map_plot($map, $nx, $ny, $w, $h, $plots, $pid);
 	}
 }
@@ -131,8 +131,6 @@ function part1 (string $input) {
 			map_plot($map, $x, $y, $w, $h, $plots, $pid);
 		}
 	}
-
-	// rd($map);
 
 	return array_reduce(
 		$plots,
@@ -256,6 +254,7 @@ function part2 (string $input) {
 	);
 }
 
+ray()->measure();
 $s = microtime(true);
 
 // 1
@@ -297,3 +296,4 @@ println('2) Result of real input: ' . part2($input));
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
+ray()->measure();

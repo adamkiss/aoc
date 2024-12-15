@@ -102,6 +102,25 @@ function single_string_map(array $murderbots, $w, $h) {
 	return $s;
 }
 
+function has_ten_continuous(array $murderbots, $w, $h) {
+	$m = [];
+	foreach ($murderbots as $b) {
+		$m[$b->y * $w + $b->x] = true;
+	}
+	ksort($m);
+
+	$c = 0;
+	$l = -1;
+	foreach (array_keys($m) as $v) {
+		$c = ($v === $l + 1) ? $c + 1 : 0;
+		if ($c === 10) {
+			return true;
+		}
+		$l = $v;
+	}
+	return false;
+}
+
 function process_input(string $i, int $limitx, int $limity) : array {
 	$i = explode("\n", $i);
 	foreach ($i as $j=>$b) {
@@ -131,7 +150,7 @@ function part1 (string $input, int $mx, int $my) {
 	return array_reduce($q, fn ($a, $i) => $a * $i, 1);
 }
 
-function part2 (string $input, int $mx, int $my) {
+function part2_image (string $input, int $mx, int $my) {
 	$murderbots = process_input($input, $mx, $my);
 
 	$repsx = 4;
@@ -191,6 +210,43 @@ function part2 (string $input, int $mx, int $my) {
 	imagegif($i, __DIR__ . "/outputs/14@{$scale}.gif");
 
 	return true;
+}
+
+function part2 (string $input, int $mx, int $my): void {
+	$murderbots = process_input($input, $mx, $my);
+
+	$s = 0;
+	while (true) {
+		foreach ($murderbots as $mb) {
+			$mb->move();
+		}
+		$s++;
+
+		if (! has_ten_continuous($murderbots, $mx, $my)) {
+			continue;
+		}
+
+		$m = [];
+		foreach ($murderbots as $b) {
+			$m[$b->y][$b->x] = true;
+		}
+
+		for ($dy=0; $dy < ceil($my/2); $dy++) {
+			for ($dx=0; $dx < $mx; $dx++) {
+				print isset($m[$dy*2][$dx])
+					? (
+						isset($m[$dy*2+1][$dx])
+						? '█' : '▀'
+					) : (
+						isset($m[$dy*2+1][$dx])
+						? '▄' : ' '
+					);
+			}
+			print "\n";
+		}
+		println("Elapsed: {$s}s");
+		break;
+	}
 }
 
 $s = microtime(true);

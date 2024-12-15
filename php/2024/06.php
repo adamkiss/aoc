@@ -133,7 +133,7 @@ function isMapTraversalLooped(array $map, array $pos, array $vec) : bool {
 	} while (true);
 }
 
-function printMap(array $map) {
+function print_map(array $map) {
 	// ray()->html(
 	// 	'<pre>'.
 	// 	A::join(A::map($map, fn($line) => A::join($line, '')), "\n")
