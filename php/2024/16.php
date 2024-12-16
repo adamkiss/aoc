@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-ini_set('memory_limit', '8192M');
+ini_set('memory_limit', '15000M');
 
 $input = read_input();
 $input_demo = <<<INPUT
@@ -48,165 +48,133 @@ const DIRS_VEC = [
 	'<' => [-1, 0],
 	'^' => [0, -1],
 ];
-const DIRS_NEXT = [
+const DIRS_RIGHT = [
 	'>' => 'v',
 	'v' => '<',
 	'<' => '^',
 	'^' => '>',
 ];
+const DIRS_LEFT = [
+	'>' => '^',
+	'v' => '>',
+	'<' => 'v',
+	'^' => '<',
+];
 
-class State {
-	public int $score = 0;
-	public bool $done = false;
-	public array $path = [];
-
-	public function __construct(
-		public array $p,
-		public string $d
-	) {}
-
+function print_map_raw(array $map, array $path): string {
+	foreach ($path as [$v, $d]) {
+		$map[$v[1]][$v[0]] = $d;
+	}
+	return join(array: $map, separator: "\n");
+}
+function print_map(array $map, array $path) {
+	println(print_map_raw($map, $path));
 }
 
 function vec_add(array $v1, array $v2): array {
 	return [$v1[0] + $v2[0], $v1[1] + $v2[1]];
 }
 function vec_to_str(array $v): string {
-	return "{{$v[0]};{$v[1]}}";
+	return "{$v[0]};{$v[1]}";
+}
+function pd_to_str(array $p, string $d): string {
+	return vec_to_str($p).";{$d}";
 }
 
 function peek(array $lines, array $w) : string|null {
 	return $lines[$w[1]][$w[0]] ?? null;
 }
 
-function p1_next(array $lines, State $s) : State|array|false {
-	$next = [];
-	$score = [0, 1000, 2000, 1000];
-
-	for ($i=0; $i < 4; $i++) {
-		$np = vec_add($s->p, DIRS_VEC[$s->d]);
-		$n = peek($lines, $np);
-
-		if ($n === 'E') {
-			$s->path [vec_to_str($s->p)] = true;
-			$s->path [vec_to_str($np)] = true;
-			$s->score += 1;
-			$s->done = true;
-			return $s;
-		}
-
-		if (isset($s->path[vec_to_str($np)]) || $n === 'S' || $n === '#') {
-			$s->d = DIRS_NEXT[$s->d];
-			continue;
-		}
-
-		$sn = clone $s;
-		$sn->path [vec_to_str($s->p)]= true;
-		$sn->p = vec_add($sn->p, DIRS_VEC[$s->d]);
-		$sn->score += $score[$i] + 1;
-		$next [] = $sn;
-
-		$s->d = DIRS_NEXT[$s->d];
-	}
-
-	if (empty($next)) {
-		return false;
-	}
-	return $next;
-}
-
 function part1 (string $input) {
 	$lines = explode("\n", $input);
 
 	for ($i=count($lines)-1; $i >= 0; $i--) {
-		if (!str_contains($lines[$i], 'S')) {
-			continue;
-		}
-		$p = [strpos($lines[$i], 'S'), $i];
-		break;
+		match (true) {
+			strpos($lines[$i], 'S') !== false => $p = [strpos($lines[$i], 'S'), $i],
+			strpos($lines[$i], 'E') !== false => $e = [strpos($lines[$i], 'E'), $i],
+			true => null
+		};
 	}
 	$d = '>';
 
-	$found = [];
-	$states = new SplQueue();
-	$states->enqueue(new State($p, $d));
+	$visited = [];
+	$visited_end = [];
+	$q = new SplPriorityQueue();
+	$q->setExtractFlags(SplPriorityQueue::EXTR_BOTH);
+	$q->insert([$p, $d, []], 0);
+	$bestscore = PHP_INT_MAX;
 
-	$iter = 0;
+	foreach ($q as ['data' => $v, 'priority' => $prio]) {
+		[$p, $d, $path] = $v;
+		$score = -$prio;
 
-	while ($states->count() > 0) {
-		if ($iter++ % 1000 === 0) {
-			println($iter, $states->count(), count($found), sprintf("%.3fMB", memory_get_usage() / 1024 / 1024));
-		}
-		if ($iter % 100000 === 0) {
-			println($states->count());
-			$sts = [];
-			foreach ($states as $s) {
-				$sts []= join(',', array_keys($s->path)) . vec_to_str($s->p) . $s->d;
+		$path []= [$p, $d];
+		$visited[pd_to_str($p,$d)] = true;
+
+		if ($p === $e) {
+			if ($score > $bestscore) {
+				return [$bestscore, $visited_end];
 			}
-			println(count($sts));
-			$sts = array_unique($sts);
-			println(count($sts));
-			rd($sts);
-		}
-		$s = $states->dequeue();
 
-		$sa = p1_next($lines, $s);
-
-		if ($sa === false) {
+			foreach ($path as [$p, $d]) {
+				$visited_end[vec_to_str($p)] = true;
+			}
+			$bestscore = $score;
 			continue;
 		}
-		if ($sa instanceof State) {
-			if ($sa->done) {
-				$found []= $sa;
+
+		$l = DIRS_LEFT[$d];
+		$r = DIRS_RIGHT[$d];
+		foreach ([$d, $l, $r] as $step) {
+			$to = vec_add($p, DIRS_VEC[$step]);
+			if ($lines[$to[1]][$to[0]] === '#' || isset($visited[pd_to_str($to, $step)])) {
 				continue;
 			}
-			$states->enqueue($sa);
-			continue;
-		}
-		if (is_array($sa)) {
-			foreach ($sa as $i) {
-				$states->enqueue($i);
-			}
-		}
 
+			$q->insert([$to, $step, $path], $prio - ($d === $step ? 1 : 1001));
+		}
 	}
-
-	usort($found, fn ($a, $b) => $a->score <=> $b->score);
-
-	return $found[0]->score;
 }
 
-function part2 (string $input) {
-	return true;
+function part2 (array $input) {
+	return count($input);
 }
 
 $s = microtime(true);
 
 // 1
 $p = microtime(true);
-$r = part1($input_demo);
+[$r, $path_demo] = part1($input_demo);
 println('1) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 7036);
 
 $p = microtime(true);
-$r = part1($input_demo2);
+[$r, $path_demo2] = part1($input_demo2);
 println('1) Result of demo2: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 11048);
 
 $p = microtime(true);
-println('1) Result of real input: ' . part1($input));
+[$r, $path_input] = part1($input);
+println('1) Result of real input: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 // 2
 $p = microtime(true);
-$r = part2($input_demo);
+$r = part2($path_demo);
 println('2) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
-assert($r === 1);
+assert($r === 45);
 
 $p = microtime(true);
-println('2) Result of real input: ' . part2($input));
+$r = part2($path_demo2);
+println('2) Result of demo: ' . $r);
+printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+assert($r === 64);
+
+$p = microtime(true);
+println('2) Result of real input: ' . part2($path_input));
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
