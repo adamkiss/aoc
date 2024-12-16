@@ -98,40 +98,39 @@ function part1 (string $input) {
 	$d = '>';
 
 	$visited = [];
-	$visited_end = [];
+	$visited_all_best = [];
 	$q = new SplPriorityQueue();
 	$q->setExtractFlags(SplPriorityQueue::EXTR_BOTH);
 	$q->insert([$p, $d, []], 0);
-	$bestscore = PHP_INT_MAX;
+	$bs = PHP_INT_MAX;
 
-	foreach ($q as ['data' => $v, 'priority' => $prio]) {
-		[$p, $d, $path] = $v;
-		$score = -$prio;
+	foreach ($q as ['data' => $try, 'priority' => $prio]) {
+		[$p, $d, $path] = $try;
 
-		$path []= [$p, $d];
-		$visited[pd_to_str($p,$d)] = true;
+		$path[] = "{$p[0]};{$p[1]}";
+		$visited["{$p[0]};{$p[1]};{$d}"] = true;
 
 		if ($p === $e) {
-			if ($score > $bestscore) {
-				return [$bestscore, $visited_end];
+			if (-$prio > $bs) {
+				return [$bs, $visited_all_best];
 			}
 
-			foreach ($path as [$p, $d]) {
-				$visited_end[vec_to_str($p)] = true;
+			$bs = -$prio;
+			foreach ($path as $v) {
+				$visited_all_best[$v] = true;
 			}
-			$bestscore = $score;
 			continue;
 		}
 
 		$l = DIRS_LEFT[$d];
 		$r = DIRS_RIGHT[$d];
-		foreach ([$d, $l, $r] as $step) {
-			$to = vec_add($p, DIRS_VEC[$step]);
-			if ($lines[$to[1]][$to[0]] === '#' || isset($visited[pd_to_str($to, $step)])) {
+		foreach ([$d, $l, $r] as $nd) {
+			$to = vec_add($p, DIRS_VEC[$nd]);
+			if ($lines[$to[1]][$to[0]] === '#' || isset($visited["{$to[0]};{$to[1]};{$nd}"])) {
 				continue;
 			}
 
-			$q->insert([$to, $step, $path], $prio - ($d === $step ? 1 : 1001));
+			$q->insert([$to, $nd, $path], $prio - ($d === $nd ? 1 : 1001));
 		}
 	}
 }
