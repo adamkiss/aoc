@@ -135,6 +135,67 @@ function part1 (string $input) {
 	}
 }
 
+function part1_anim (string $input) {
+	$lines = explode("\n", $input);
+
+	for ($i=count($lines)-1; $i >= 0; $i--) {
+		match (true) {
+			strpos($lines[$i], 'S') !== false => $p = [strpos($lines[$i], 'S'), $i],
+			strpos($lines[$i], 'E') !== false => $e = [strpos($lines[$i], 'E'), $i],
+			true => null
+		};
+	}
+	$d = '>';
+
+	$visited = [];
+	$visited_all_best = [];
+	$q = new SplPriorityQueue();
+	$q->setExtractFlags(SplPriorityQueue::EXTR_BOTH);
+	$q->insert([$p, $d, []], 0);
+	$bs = PHP_INT_MAX;
+
+	$animap = [];
+	foreach ($lines as $l) {
+		$animap [] = str_replace(['#', '.'], ['+', ' '], $l);
+	}
+
+	foreach ($q as ['data' => $try, 'priority' => $prio]) {
+		print_map($animap, []);
+		fwrite(STDOUT, "\e[".count($lines)."A"); // up
+		fwrite(STDOUT, "\e[".strlen($lines[0])."D"); // left
+		usleep(10_000);
+
+		[$p, $d, $path] = $try;
+
+		$animap[$p[1]][$p[0]] = '#';
+		$path[] = "{$p[0]};{$p[1]}";
+		$visited["{$p[0]};{$p[1]};{$d}"] = true;
+
+		if ($p === $e) {
+			if (-$prio > $bs) {
+				return [$bs, $visited_all_best];
+			}
+
+			$bs = -$prio;
+			foreach ($path as $v) {
+				$visited_all_best[$v] = true;
+			}
+			continue;
+		}
+
+		$l = DIRS_LEFT[$d];
+		$r = DIRS_RIGHT[$d];
+		foreach ([$d, $l, $r] as $nd) {
+			$to = vec_add($p, DIRS_VEC[$nd]);
+			if ($lines[$to[1]][$to[0]] === '#' || isset($visited["{$to[0]};{$to[1]};{$nd}"])) {
+				continue;
+			}
+
+			$q->insert([$to, $nd, $path], $prio - ($d === $nd ? 1 : 1001));
+		}
+	}
+}
+
 function part2 (array $input) {
 	return count($input);
 }
@@ -143,21 +204,28 @@ $s = microtime(true);
 
 // 1
 $p = microtime(true);
-[$r, $path_demo] = part1($input_demo);
+[$r, $path_demo] = part1_anim($input_demo);
 println('1) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 7036);
 
 $p = microtime(true);
-[$r, $path_demo2] = part1($input_demo2);
+[$r, $path_demo2] = part1_anim($input_demo2);
 println('1) Result of demo2: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 11048);
 
+println();
+println('o/');
+
+die();
+
 $p = microtime(true);
-[$r, $path_input] = part1($input);
+[$r, $path_input] = part1_anim($input);
 println('1) Result of real input: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+
+println();println();
 
 // 2
 $p = microtime(true);
@@ -166,11 +234,15 @@ println('2) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 45);
 
+println();println();
+
 $p = microtime(true);
 $r = part2($path_demo2);
 println('2) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 64);
+
+println();println();
 
 $p = microtime(true);
 println('2) Result of real input: ' . part2($path_input));
