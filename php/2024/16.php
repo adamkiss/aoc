@@ -137,7 +137,15 @@ function part1 (string $input) {
 			println($iter, $states->count(), count($found), sprintf("%.3fMB", memory_get_usage() / 1024 / 1024));
 		}
 		if ($iter % 100000 === 0) {
-			var_dump($states);
+			println($states->count());
+			$sts = [];
+			foreach ($states as $s) {
+				$sts []= join(',', array_keys($s->path)) . vec_to_str($s->p) . $s->d;
+			}
+			println(count($sts));
+			$sts = array_unique($sts);
+			println(count($sts));
+			rd($sts);
 		}
 		$s = $states->dequeue();
 
