@@ -99,20 +99,33 @@ function arr_to_bin(array $a): string {
 	return join(' ', array_map(fn ($i) => sprintf('%03s', decbin($i)), $a));
 }
 
+/**
+ * recurse part 2
+ *
+ * @param string $t   Target: Program in a bin form '001 000 110 111 …'
+ * @param string $num Curently tested number in base 8
+ * @param integer $rb Register B
+ * @param integer $rc Register C
+ * @param string $p   Program
+ * @return string|false
+ */
 function part2_recurse(string $t, string $num, int $rb, int $rc, string $p): string|false {
 	$r = part1([base_convert($num, 8, 10), $rb, $rc, $p], joined: false);
 
+	// bail early: output is shorter than received numbers
 	if (count($r) !== strlen($num)) {
 		return false;
 	}
+	// get binary format of result
 	$rbin = arr_to_bin($r);
 	if ($t === $rbin) {
-		return $num;
+		return $num; // full match = win
 	}
 	if (!str_ends_with($t, $rbin)) {
-		return false;
+		return false; // non-match = fail
 	}
 
+	// partially matching, let's one position go deeper
 	for ($i=0; $i < 8; $i++) {
 		$n = part2_recurse($t, $num.$i, $rb, $rc, $p);
 		if (is_string($n)) {
@@ -126,10 +139,10 @@ function part2_recurse(string $t, string $num, int $rb, int $rc, string $p): str
 function part2_recursive(string $i) {
 	[$ra, $rb, $rc, $p, $pc] = process_input($i);
 
-	$pc_arr = explode(',', $pc);
-	$target = arr_to_bin($pc_arr);
+	$pc_arr = explode(',', $pc); // '1,2' -> [1,2]
+	$target = arr_to_bin($pc_arr); // [1,2] -> '001 010'
 
-	$test = A::fill([], 8, fn ($i) => (string)$i);
+	$test = A::fill([], 8, fn ($i) => (string)$i); // [0..7]
 	foreach ($test as $s) {
 		if ($nr = part2_recurse($target, $s, $rb, $rc, $p)) {
 			return base_convert($nr, 8, 10);
