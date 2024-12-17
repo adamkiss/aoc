@@ -101,14 +101,12 @@ function recurse(target: string, nr: string, lev: number): number|false {
 		return false;
 	}
 
-	[...Array(8)].forEach((v, i) => {
-		const result = recurse(target, nr+i, lev+1)
-		if (result !== false) {
-			return result;
+	return [...Array(8)].keys().reduce((f, v) => {
+		if (f !== false) {
+			return f
 		}
-	});
-
-	return false;
+		return recurse(target, nr+v, lev+1)
+	}, false);
 }
 
 //console.log('Pt 1:', doit(-1).join(','));
