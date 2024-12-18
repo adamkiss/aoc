@@ -14,6 +14,19 @@ function println(...$strings): void {
 	print "\n";
 }
 
+
+if (! function_exists('a')) {
+	/**
+	 * Array creating function taking advantage of the func(key: 'value') syntax
+	 *
+	 * @param mixed ...$array
+	 * @return array
+	 */
+	function a(...$array): array {
+		return $array;
+	}
+}
+
 /**
  * Stubbing Ray
  *
