@@ -80,33 +80,62 @@ function print_map(array $m, $w, $h, array $steps = []): string {
 	return $s;
 }
 
+function find_best2(array $m, int $w, int $h) : array {
+	$targetx = $w - 1;
+	$targety = $h - 1;
+
+	$q = new SplPriorityQueue();
+	$q->insert([0,0,0], 0);
+
+	$c = 0;
+	while(!$q->isEmpty()) {
+		[$x, $y, $steps] = $q->extract();
+
+		$c++;
+
+		if ($x === $targetx && $y === $targety) {
+			return [$steps, $c];
+		}
+
+		$steps++;
+
+		foreach ([[1, 0], [0, 1], [0, -1], [-1, 0]] as [$dx, $dy]) {
+			$nx = $x + $dx;
+			$ny = $y + $dy;
+
+			if ($nx < 0 || $ny < 0 || $nx >= $w || $ny >= $h) {
+				continue;
+			}
+			if ($m[$ny][$nx]['corrupted'] || $m[$ny][$nx]['visited']){
+				continue;
+			}
+
+			$dc = ($w - $x + $h - $y) * 1000;
+			$q->insert([$nx, $ny, $steps], -$steps + $dc);
+			$m[$ny][$nx]['visited'] = true;
+		}
+	}
+
+	return [null, $c];
+}
+
 function find_best(array $m, int $w, int $h) : array {
 	$targetx = $w - 1;
 	$targety = $h - 1;
 
 	$q = new SplPriorityQueue();
 	$q->setExtractFlags(SplPriorityQueue::EXTR_BOTH);
-	$q->insert([0,0,[],0], 0);
-
-	$best = [PHP_INT_MAX, []];
+	$q->insert([0,0,0], 0);
 
 	$c = 0;
-	while($q->count() > 0) {
-		[
-			'data' => [$x, $y, $path, $steps],
-			'priority' => $distance
-		] = $q->extract();
+	while(!$q->isEmpty()) {
+		['data' => [$x, $y, $steps]] = $q->extract();
 
 		$c++;
 
 		if ($x === $targetx && $y === $targety) {
-			if ($steps > $best[0]) {
-				continue;
-			}
-			$best = [$steps, $path];
-			continue;
+			return [$steps, $c];
 		}
-
 		if ($x < 0 || $y < 0 || $x >= $w || $y >= $h) {
 			continue;
 		}
@@ -115,32 +144,22 @@ function find_best(array $m, int $w, int $h) : array {
 		}
 
 		$m[$y][$x]['visited'] = true;
-		$path[] = [$x, $y];
 		$steps++;
 
-		// if ($c++ % 10000 === 0) {
-		// 	print(print_map($m, $w, $h));
-		// 	printf("%s (%.3fMB) -> %s", $q->count(), memory_get_usage(true) / 1024 / 1024, $distance);
-		// 	fwrite(STDOUT, "\e[{$w}A"); // up
-		// 	fwrite(STDOUT, "\e[".($h-1)."D"); // left
-		// }
-
-		$dist = sqrt(($w - $x) * ($w - $x) + ($h - $y) * ($h - $y));
-		foreach ([[0, 1], [1, 0], [-1, 0], [0, -1]] as [$dx, $dy]) {
-			[$nx, $ny] = [$x + $dx, $y + $dy];
-			$q->insert(
-				[$x+$dx, $y+$dy, $path, $steps],
-				-$steps + $dist
-			);
+		$dc = 0;
+		$dc = ($w - $x + $h - $y) * 100;
+		foreach ([[1, 0], [0, 1], [0, -1], [-1, 0]] as [$dx, $dy]) {
+			// $d = sqrt(pow($w - $x - $dx, 2) + pow($h - $y - $dy, 2));
+			$q->insert([$x+$dx, $y+$dy, $steps], -$steps + $dc);
 		}
 	}
-	$best[2] = $c;
-	return $best;
+
+	return [null, $c];
 }
 
 function part1 (string $input, int $limit, int $w, int $h) {
 	$m = process_input($input, $w, $h, $limit);
-	$best = find_best($m, $w, $h);
+	$best = find_best2($m, $w, $h);
 	return $best[0];
 }
 
@@ -153,8 +172,8 @@ function part2 (string $input, $limit, $w, $h) {
 	foreach (explode("\n", $input) as $next) {
 		[$nx, $ny] = array_map('intval', explode(',', $next));
 		$m[$ny][$nx]['corrupted'] = true;
-		[$steps, $_] = find_best($m, $w, $h);
-		if ($steps === PHP_INT_MAX) {
+		[$steps, $_] = find_best2($m, $w, $h);
+		if ($steps === null) {
 			println("Try #{$c}");
 			return "{$nx},{$ny}";
 		}
