@@ -80,7 +80,7 @@ function print_map(array $m, $w, $h, array $steps = []): string {
 	return $s;
 }
 
-function find_best2(array $m, int $w, int $h) : array {
+function find_best(array $m, int $w, int $h) : array {
 	$targetx = $w - 1;
 	$targety = $h - 1;
 
@@ -119,47 +119,9 @@ function find_best2(array $m, int $w, int $h) : array {
 	return [null, $c];
 }
 
-function find_best(array $m, int $w, int $h) : array {
-	$targetx = $w - 1;
-	$targety = $h - 1;
-
-	$q = new SplPriorityQueue();
-	$q->setExtractFlags(SplPriorityQueue::EXTR_BOTH);
-	$q->insert([0,0,0], 0);
-
-	$c = 0;
-	while(!$q->isEmpty()) {
-		['data' => [$x, $y, $steps]] = $q->extract();
-
-		$c++;
-
-		if ($x === $targetx && $y === $targety) {
-			return [$steps, $c];
-		}
-		if ($x < 0 || $y < 0 || $x >= $w || $y >= $h) {
-			continue;
-		}
-		if ($m[$y][$x]['corrupted'] || $m[$y][$x]['visited']){
-			continue;
-		}
-
-		$m[$y][$x]['visited'] = true;
-		$steps++;
-
-		$dc = 0;
-		$dc = ($w - $x + $h - $y) * 100;
-		foreach ([[1, 0], [0, 1], [0, -1], [-1, 0]] as [$dx, $dy]) {
-			// $d = sqrt(pow($w - $x - $dx, 2) + pow($h - $y - $dy, 2));
-			$q->insert([$x+$dx, $y+$dy, $steps], -$steps + $dc);
-		}
-	}
-
-	return [null, $c];
-}
-
 function part1 (string $input, int $limit, int $w, int $h) {
 	$m = process_input($input, $w, $h, $limit);
-	$best = find_best2($m, $w, $h);
+	$best = find_best($m, $w, $h);
 	return $best[0];
 }
 
@@ -172,7 +134,7 @@ function part2 (string $input, $limit, $w, $h) {
 	foreach (explode("\n", $input) as $next) {
 		[$nx, $ny] = array_map('intval', explode(',', $next));
 		$m[$ny][$nx]['corrupted'] = true;
-		[$steps, $_] = find_best2($m, $w, $h);
+		[$steps, $_] = find_best($m, $w, $h);
 		if ($steps === null) {
 			println("Try #{$c}");
 			return "{$nx},{$ny}";
