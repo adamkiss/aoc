@@ -126,14 +126,14 @@ function part2 (array $p, int $above) {
 			$validdiffs [] = [$i, $j, $ia+$ja];
 		}
 	}
-	foreach ($p as $b) {
+	foreach ($p as [$b, $bx, $by]) {
 		foreach ($validdiffs as [$dx, $dy, $len]) {
 			$loops++;
-			$a_ = vtos($b[1] + $dx, $b[2] + $dy);
-			if (!isset($p[$a_]) || $b[0] < $p[$a_][0]) {
+			$a_ = vtos($bx + $dx, $by + $dy);
+			if (!isset($p[$a_]) || $b < $p[$a_][0]) {
 				continue;
 			}
-			if ($above > $b[0] - $p[$a_][0] - $len) {
+			if ($above > $b - $p[$a_][0] - $len) {
 				continue;
 			}
 			$shortcuts++;
