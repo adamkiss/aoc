@@ -118,15 +118,20 @@ function part2 (array $p, int $above) {
 	$validdiffs = [];
 	for ($i=-20; $i <= 20; $i++) {
 		for ($j=-20; $j <= 20; $j++) {
-			$ia = $i<0?-$i:$i;
-			$ja = $j<0?-$j:$j;
+			$ia = abs($i);
+			$ja = abs($j);
 			if ($ia+$ja > 20 || $ia+$ja === 0) {
 				continue;
 			}
 			$validdiffs [] = [$i, $j, $ia+$ja];
 		}
 	}
+	$i = 0;
 	foreach ($p as [$b, $bx, $by]) {
+		if ($i++ < $above) {
+			continue;
+		}
+
 		foreach ($validdiffs as [$dx, $dy, $len]) {
 			$loops++;
 			$a_ = vtos($bx + $dx, $by + $dy);
