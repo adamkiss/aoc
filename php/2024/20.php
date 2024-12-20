@@ -85,14 +85,13 @@ function part1_sp(string $input) {
 function part1 (string $input, int $above) {
 	[$m, $w, $h, $s, $e] = process_input($input);
 	[$_, $path] = find_shortest_path($m, $w, $h, $s, $e);
-	$path_steps = array_keys($path);
+	$pk = array_keys($path);
 	$shortcuts = 0;
+	$loops = 0;
 	for ($i=0; $i < count($path); $i++) {
-		[$b, $bx, $by] = $path[$path_steps[$i]];
-		foreach ([
-			[-2,0], [-1,-1], [0,-2], [1, -1],
-			[2, 0], [1, 1], [0, 2], [-1, 1]
-		] as [$ix, $iy]) {
+		[$b, $bx, $by] = $path[$pk[$i]];
+		foreach ([[-2,0], [0,-2], [2, 0], [0, 2]] as [$ix, $iy]) {
+			$loops++;
 			$ax = $bx + $ix;
 			$ay = $by + $iy;
 			$axy = "{$ax};{$ay}";
@@ -112,31 +111,29 @@ function part1 (string $input, int $above) {
 			$shortcuts++;
 		}
 	}
+	println("↓ took {$loops} iterations");
 	return $shortcuts;
 }
 
 function part2 (string $input, int $above) {
 	[$m, $w, $h, $s, $e] = process_input($input);
-	[$_, $path] = find_shortest_path($m, $w, $h, $s, $e);
-	$path_steps = array_keys($path);
-	$cp = count($path); // I was losing 100ms to always doing count()
+	[, $path] = find_shortest_path($m, $w, $h, $s, $e);
+	$path = array_values($path);
+
 	$shortcuts = 0;
-	for ($i=0; $i < $cp - $above; $i++) {
-		[$b, $bx, $by] = $path[$path_steps[$i]];
-
-
-		for ($j=$i+$above; $j < $cp; $j++) {
-			[$a, $ax, $ay] = $path[$path_steps[$j]];
-			$l = abs($bx - $ax) + abs($by - $ay);
-			if ($l > 20) {
-				continue;
-			}
-			if ($a - $b - $l < $above) {
+	$loops = 0;
+	$i = 0;
+	foreach (array_slice($path, 0, count($path) - $above) as $i => $b) {
+		foreach (array_slice($path, $i+$above+2) as $a) {
+			$loops++;
+			$l = abs($b[1] - $a[1]) + abs($b[2] - $a[2]);
+			if ($l > 20 || ($a[0]-$b[0]-$l) < $above) {
 				continue;
 			}
 			$shortcuts++;
 		}
 	}
+	println("↓ took {$loops} iterations");
 	return $shortcuts;
 }
 
