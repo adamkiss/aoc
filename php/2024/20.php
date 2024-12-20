@@ -119,17 +119,19 @@ function part2 (string $input, int $above) {
 	[$m, $w, $h, $s, $e] = process_input($input);
 	[$_, $path] = find_shortest_path($m, $w, $h, $s, $e);
 	$path_steps = array_keys($path);
+	$cp = count($path); // I was losing 100ms to always doing count()
 	$shortcuts = 0;
-	for ($i=0; $i < count($path) - 1; $i++) {
+	for ($i=0; $i < $cp - $above; $i++) {
 		[$b, $bx, $by] = $path[$path_steps[$i]];
-		for ($j=$i+1; $j < count($path); $j++) {
+
+
+		for ($j=$i+$above; $j < $cp; $j++) {
 			[$a, $ax, $ay] = $path[$path_steps[$j]];
 			$l = abs($bx - $ax) + abs($by - $ay);
 			if ($l > 20) {
 				continue;
 			}
-			$saved = $a - $b - $l;
-			if ($saved < $above) {
+			if ($a - $b - $l < $above) {
 				continue;
 			}
 			$shortcuts++;
