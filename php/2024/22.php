@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+use Kirby\Filesystem\F;
 
-ini_set('memory_limit', '15000M');
+require_once __DIR__ . '/vendor/autoload.php';
 
 $input = read_input();
 $input_demo = <<<INPUT
@@ -47,45 +47,80 @@ function part1 (string $input) {
 	return $sum;
 }
 
+function part2_debug() {
+	$max = [];
+	foreach ([123] as $numord => $on) {
+		$seen = [];
+
+		$price = $on % 10;
+		$d = [[$price, null]];
+		$n = $on;
+
+		for ($i=1; $i <= 10; $i++) {
+			$n = step($n);
+			$nextPrice = $n % 10;
+			$d []= [$nextPrice, $nextPrice - $price];
+			$price = $nextPrice;
+
+			if ($i < 4) {
+				continue;
+			}
+			$seq = join(',', [
+				$d[$i-3][1],
+				$d[$i-2][1],
+				$d[$i-1][1],
+				$d[$i-0][1],
+			]);
+			println($i, $seq, $price, count($d));
+			if (isset($seen[$seq])) {
+				continue;
+			}
+			$seen[$seq] = true;
+			if (!isset($max[$seq])) {
+				$max[$seq] = 0;
+			}
+			$max[$seq] += $price;
+		}
+	}
+	rd($d);
+}
+
 function part2 (string $input) {
 	$nums = process_input($input);
-	$digits = [];
 	$max = [];
 	foreach ($nums as $numord => $on) {
 		$seen = [];
-		$n = step($on);
-		$p = $n % 10;
-		$digits[$on] = [[$p, null]];
-		for ($i=1; $i < 2000; $i++) {
-			$n = step($n);
-			$np = $n % 10;
-			$digits[$on] []= [$np, $np-$p];
-			$p = $np;
+		$n = $on;
+		$price = $n % 10;
+		$d = [[$price, null]];
 
-			if ($i > 3) {
-				$seq = join(',', [
-					$digits[$on][$i-3][1],
-					$digits[$on][$i-2][1],
-					$digits[$on][$i-1][1],
-					$digits[$on][$i][1],
-				]);
-				if (isset($seen[$seq])) {
-					continue;
-				}
-				$seen[$seq] = true;
-				if (!isset($max[$seq])) {
-					$max[$seq] = $p;
-				} else {
-					$max[$seq] += $p;
-				}
+		for ($i=1; $i <= 2000; $i++) {
+			$n = step($n);
+			$nextPrice = $n % 10;
+			$d []= [$nextPrice, $nextPrice - $price];
+			$price = $nextPrice;
+
+			if ($i < 3) {
+				continue;
 			}
+			$seq = join(',', [
+				$d[$i-3][1],
+				$d[$i-2][1],
+				$d[$i-1][1],
+				$d[$i-0][1],
+			]);
+			if (isset($seen[$seq])) {
+				continue;
+			}
+			$seen[$seq] = true;
+			if (!isset($max[$seq])) {
+				$max[$seq] = 0;
+			}
+			$max[$seq] += $price;
 		}
 	}
 	arsort($max);
 	$k = array_keys($max);
-	for ($i=0; $i < 10; $i++) {
-		ray("{$k[$i]} => {$max[$k[$i]]}");
-	}
 	return $max[$k[0]];
 }
 
@@ -107,12 +142,12 @@ printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 
 // 1
-$p = microtime(true);
-$r = part1($input_demo);
-println('1) Result of demo: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
-assert($r === 37327623);
-
+// $p = microtime(true);
+// $r = part1($input_demo);
+// println('1) Result of demo: ' . $r);
+// printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+// assert($r === 37327623);
+//
 $p = microtime(true);
 println('1) Result of real input: ' . part1($input));
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
@@ -120,9 +155,15 @@ printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 // 2
 $p = microtime(true);
 $r = part2($input_demo2);
-println('2) Result of demo: ' . $r);
+println('2) Result of demo (2): ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 23);
+
+$p = microtime(true);
+$r = part2($input_demo);
+println('2) Result of demo (1): ' . $r);
+printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+assert($r === 24);
 
 $p = microtime(true);
 $r = part2($input);
