@@ -41,7 +41,7 @@ const ARROWPAD = [
 	],
 	'^' => [
 		'A' => '>A',
-		'>' => '>vA',
+		'>' => 'v>A',
 		'^' => 'A',
 		'v' => 'vA',
 		'<' => 'v<A',
@@ -167,14 +167,14 @@ function solve(string $c, int $levels): int {
 
 		if ($dx < 0 && $ax === 0 && $by === 3) {
 			$str .= str_repeat($dy < 0 ? '^' : 'v', abs($dy));
-			$str .= str_repeat('<', abs($dx));
+			$str .= str_repeat('<', -$dx);
 		} else {
-			if ($dy > 0) {
-				$str .= str_repeat('v', $dy);
-				$str .= str_repeat($dx < 0 ? '<' : '>', abs($dx));
-			} else {
-				$str .= str_repeat($dx < 0 ? '<' : '>', abs($dx));
+			if ($dx < 0) {
+				$str .= str_repeat('<', -$dx);
 				$str .= str_repeat($dy < 0 ? '^' : 'v', abs($dy));
+			} else {
+				$str .= str_repeat($dy < 0 ? '^' : 'v', abs($dy));
+				$str .= str_repeat($dx < 0 ? '<' : '>', abs($dx));
 			}
 		}
 		$str .= 'A';
@@ -184,7 +184,6 @@ function solve(string $c, int $levels): int {
 }
 
 function part1 (string $input) {
-	global $cache;
 	$codes = array_reduce(explode("\n", $input), function ($acc, $c) {
 		$acc[$c] = intval($c, 10);
 		return $acc;
@@ -201,14 +200,18 @@ function part1 (string $input) {
 }
 
 function part2 (string $input) {
-	return true;
-}
+	$codes = array_reduce(explode("\n", $input), function ($acc, $c) {
+		$acc[$c] = intval($c, 10);
+		return $acc;
+	}, []);
 
-// println('<v<A>>^A<vA<A>>^AAvAA<^A>A<v<A>>^AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A');
-// println(solveStr('179A', 3));
-// println('<v<A>>^AA<vA<A>>^AAvAA<^A>A<vA>^A<A>A<vA>^A<A>A<v<A>A>^AAvA<^A>A');
-// println(solveStr('456A', 3));
-// die();
+	$sum = 0;
+	foreach ($codes as $c => $cint) {
+		$sum += $cint * solve($c, 26);
+	}
+
+	return $sum;
+}
 
 $s = microtime(true);
 
@@ -220,18 +223,19 @@ printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === 126384);
 
 $p = microtime(true);
-println('1) Result of real input: ' . part1($input));
+$r = part1($input);
+println('1) Result of real input: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+assert($r === 128962);
 
 // 2
 $p = microtime(true);
-$r = part2($input_demo);
-println('2) Result of demo: ' . $r);
+$r = part2($input);
+println('2) Result of real input: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
-assert($r === 1);
-
-$p = microtime(true);
-println('2) Result of real input: ' . part2($input));
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+assert($r !== 189612006449478); // incorrect
+assert($r !== 156714718114678); // incorrect
+assert($r > 156714718114678 && $r < 189612006449478);
+// assert($r !== 159684145150108); // found smaller (LOL)
 
 printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
