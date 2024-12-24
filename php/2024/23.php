@@ -76,32 +76,26 @@ function part1 (string $input) {
 function part2 (string $input) {
 	$net = process_input($input);
 
-	$q = new PriorityQueue();
+	$q = new SplPriorityQueue();
 	$checked = [];
 	$maxnet = [];
-	$maxnetc = 0;
 
 	foreach ($net as $pc1 => $conn) {
 		foreach (array_keys($conn) as $pc2) {
-			$q->push([$pc2, [$pc1 => true]], 1);
+			$q->insert([$pc2, [$pc1 => true]], 1);
 		}
 	}
 
 	while(!$q->isEmpty()) {
-		[$pc, $group] = $q->pop();
-		$gc = count($group);
+		[$pc, $group] = $q->extract();
 
 		if (isset($group[$pc])) {
 			$checked[$pc] = true;
-			if ($gc < $maxnetc) {
-				println("Remaining in queue: {$q->count()}, Length $gc");
-				fwrite(STDOUT, "\e[1A"); // up
-
+			if (count($group) < count($maxnet)) {
 				continue;
 			}
 
 			$maxnet = $group;
-			$maxnetc = $gc;
 			continue;
 		}
 
@@ -116,16 +110,13 @@ function part2 (string $input) {
 		}
 
 		foreach ($net[$pc] as $npc => $_) {
-			$k = join(',', [$npc, $pc, ...array_keys($group)]);
-			$q->push([$npc, [$pc => true, ...$group]], $gc + 1);
+			$q->insert([$npc, [$pc => true, ...$group]], count($group) + 1);
 		}
 	}
 
-	$maxnet = array_keys($maxnet);
-	sort($maxnet);
-	ray($maxnet);
+	ksort($maxnet);
 
-	return join(',', $maxnet);
+	return join(',', array_keys($maxnet));
 }
 
 $s = microtime(true);
