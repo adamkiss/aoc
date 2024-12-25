@@ -149,35 +149,6 @@ function part1 (string $input) {
 }
 
 function part2 (string $input) {
-	$conn = [];
-	[ , $g_raw] = explode("\n\n", $input);
-	foreach (explode("\n", $g_raw) as $g) {
-		[$c1, $op, $c2, , $co] = explode(' ', $g);
-		$conn []= "{$c1} ---> |$op| $co";
-		$conn []= "{$c2} ---> |$op| $co";
-	}
-	usort($conn, function($a, $b) {
-		$aw = match($a[0]) {
-			'x' => 3,
-			'y' => 2,
-			'z' => 1,
-			default => 0
-		};
-		$bw = match($b[0]) {
-			'x' => 3,
-			'y' => 2,
-			'z' => 1,
-			default => 0
-		};
-		if ($aw === $bw) {
-			return strcmp($a, $b);
-		} else {
-			return $bw - $aw;
-		}
-	});
-
-	$i = count($conn);
-	F::write(__DIR__ . "/outputs/24-{$i}.txt", join("\n", $conn));
 
 	return true;
 }
