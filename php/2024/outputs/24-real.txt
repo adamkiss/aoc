@@ -1,0 +1,627 @@
+flowchart TD
+	x00@{ shape: framed-circle, label: 'x00'}
+	y00@{ shape: framed-circle, label: 'y00'}
+	x01@{ shape: framed-circle, label: 'x01'}
+	y01@{ shape: framed-circle, label: 'y01'}
+	x02@{ shape: framed-circle, label: 'x02'}
+	y02@{ shape: framed-circle, label: 'y02'}
+	x03@{ shape: framed-circle, label: 'x03'}
+	y03@{ shape: framed-circle, label: 'y03'}
+	x04@{ shape: framed-circle, label: 'x04'}
+	y04@{ shape: framed-circle, label: 'y04'}
+	x05@{ shape: framed-circle, label: 'x05'}
+	y05@{ shape: framed-circle, label: 'y05'}
+	x06@{ shape: framed-circle, label: 'x06'}
+	y06@{ shape: framed-circle, label: 'y06'}
+	x07@{ shape: framed-circle, label: 'x07'}
+	y07@{ shape: framed-circle, label: 'y07'}
+	x08@{ shape: framed-circle, label: 'x08'}
+	y08@{ shape: framed-circle, label: 'y08'}
+	x09@{ shape: framed-circle, label: 'x09'}
+	y09@{ shape: framed-circle, label: 'y09'}
+	x10@{ shape: framed-circle, label: 'x10'}
+	y10@{ shape: framed-circle, label: 'y10'}
+	x11@{ shape: framed-circle, label: 'x11'}
+	y11@{ shape: framed-circle, label: 'y11'}
+	x12@{ shape: framed-circle, label: 'x12'}
+	y12@{ shape: framed-circle, label: 'y12'}
+	x13@{ shape: framed-circle, label: 'x13'}
+	y13@{ shape: framed-circle, label: 'y13'}
+	x14@{ shape: framed-circle, label: 'x14'}
+	y14@{ shape: framed-circle, label: 'y14'}
+	x15@{ shape: framed-circle, label: 'x15'}
+	y15@{ shape: framed-circle, label: 'y15'}
+	x16@{ shape: framed-circle, label: 'x16'}
+	y16@{ shape: framed-circle, label: 'y16'}
+	x17@{ shape: framed-circle, label: 'x17'}
+	y17@{ shape: framed-circle, label: 'y17'}
+	x18@{ shape: framed-circle, label: 'x18'}
+	y18@{ shape: framed-circle, label: 'y18'}
+	x19@{ shape: framed-circle, label: 'x19'}
+	y19@{ shape: framed-circle, label: 'y19'}
+	x20@{ shape: framed-circle, label: 'x20'}
+	y20@{ shape: framed-circle, label: 'y20'}
+	x21@{ shape: framed-circle, label: 'x21'}
+	y21@{ shape: framed-circle, label: 'y21'}
+	x22@{ shape: framed-circle, label: 'x22'}
+	y22@{ shape: framed-circle, label: 'y22'}
+	x23@{ shape: framed-circle, label: 'x23'}
+	y23@{ shape: framed-circle, label: 'y23'}
+	x24@{ shape: framed-circle, label: 'x24'}
+	y24@{ shape: framed-circle, label: 'y24'}
+	x25@{ shape: framed-circle, label: 'x25'}
+	y25@{ shape: framed-circle, label: 'y25'}
+	x26@{ shape: framed-circle, label: 'x26'}
+	y26@{ shape: framed-circle, label: 'y26'}
+	x27@{ shape: framed-circle, label: 'x27'}
+	y27@{ shape: framed-circle, label: 'y27'}
+	x28@{ shape: framed-circle, label: 'x28'}
+	y28@{ shape: framed-circle, label: 'y28'}
+	x29@{ shape: framed-circle, label: 'x29'}
+	y29@{ shape: framed-circle, label: 'y29'}
+	x30@{ shape: framed-circle, label: 'x30'}
+	y30@{ shape: framed-circle, label: 'y30'}
+	x31@{ shape: framed-circle, label: 'x31'}
+	y31@{ shape: framed-circle, label: 'y31'}
+	x32@{ shape: framed-circle, label: 'x32'}
+	y32@{ shape: framed-circle, label: 'y32'}
+	x33@{ shape: framed-circle, label: 'x33'}
+	y33@{ shape: framed-circle, label: 'y33'}
+	x34@{ shape: framed-circle, label: 'x34'}
+	y34@{ shape: framed-circle, label: 'y34'}
+	x35@{ shape: framed-circle, label: 'x35'}
+	y35@{ shape: framed-circle, label: 'y35'}
+	x36@{ shape: framed-circle, label: 'x36'}
+	y36@{ shape: framed-circle, label: 'y36'}
+	x37@{ shape: framed-circle, label: 'x37'}
+	y37@{ shape: framed-circle, label: 'y37'}
+	x38@{ shape: framed-circle, label: 'x38'}
+	y38@{ shape: framed-circle, label: 'y38'}
+	x39@{ shape: framed-circle, label: 'x39'}
+	y39@{ shape: framed-circle, label: 'y39'}
+	x40@{ shape: framed-circle, label: 'x40'}
+	y40@{ shape: framed-circle, label: 'y40'}
+	x41@{ shape: framed-circle, label: 'x41'}
+	y41@{ shape: framed-circle, label: 'y41'}
+	x42@{ shape: framed-circle, label: 'x42'}
+	y42@{ shape: framed-circle, label: 'y42'}
+	x43@{ shape: framed-circle, label: 'x43'}
+	y43@{ shape: framed-circle, label: 'y43'}
+	x44@{ shape: framed-circle, label: 'x44'}
+	y44@{ shape: framed-circle, label: 'y44'}
+	z00@{ shape: framed-circle, label: 'z00'}
+	z01@{ shape: framed-circle, label: 'z01'}
+	z02@{ shape: framed-circle, label: 'z02'}
+	z03@{ shape: framed-circle, label: 'z03'}
+	z04@{ shape: framed-circle, label: 'z04'}
+	z05@{ shape: framed-circle, label: 'z05'}
+	z06@{ shape: framed-circle, label: 'z06'}
+	z07@{ shape: framed-circle, label: 'z07'}
+	z08@{ shape: framed-circle, label: 'z08'}
+	z09@{ shape: framed-circle, label: 'z09'}
+	z10@{ shape: framed-circle, label: 'z10'}
+	z11@{ shape: framed-circle, label: 'z11'}
+	z12@{ shape: framed-circle, label: 'z12'}
+	z13@{ shape: framed-circle, label: 'z13'}
+	z14@{ shape: framed-circle, label: 'z14'}
+	z15@{ shape: framed-circle, label: 'z15'}
+	z16@{ shape: framed-circle, label: 'z16'}
+	z17@{ shape: framed-circle, label: 'z17'}
+	z18@{ shape: framed-circle, label: 'z18'}
+	z19@{ shape: framed-circle, label: 'z19'}
+	z20@{ shape: framed-circle, label: 'z20'}
+	z21@{ shape: framed-circle, label: 'z21'}
+	z22@{ shape: framed-circle, label: 'z22'}
+	z23@{ shape: framed-circle, label: 'z23'}
+	z24@{ shape: framed-circle, label: 'z24'}
+	z25@{ shape: framed-circle, label: 'z25'}
+	z26@{ shape: framed-circle, label: 'z26'}
+	z27@{ shape: framed-circle, label: 'z27'}
+	z28@{ shape: framed-circle, label: 'z28'}
+	z29@{ shape: framed-circle, label: 'z29'}
+	z30@{ shape: framed-circle, label: 'z30'}
+	z31@{ shape: framed-circle, label: 'z31'}
+	z32@{ shape: framed-circle, label: 'z32'}
+	z33@{ shape: framed-circle, label: 'z33'}
+	z34@{ shape: framed-circle, label: 'z34'}
+	z35@{ shape: framed-circle, label: 'z35'}
+	z36@{ shape: framed-circle, label: 'z36'}
+	z37@{ shape: framed-circle, label: 'z37'}
+	z38@{ shape: framed-circle, label: 'z38'}
+	z39@{ shape: framed-circle, label: 'z39'}
+	z40@{ shape: framed-circle, label: 'z40'}
+	z41@{ shape: framed-circle, label: 'z41'}
+	z42@{ shape: framed-circle, label: 'z42'}
+	z43@{ shape: framed-circle, label: 'z43'}
+	z44@{ shape: framed-circle, label: 'z44'}
+	z45@{ shape: framed-circle, label: 'z45'}
+	bcj ---> |bcj| rhq@{ label: 'AND'}
+	bkh ---> |bkh| rhq@{ label: 'AND'}
+	bmp ---> |bmp| cbv@{ label: 'AND'}
+	bqh ---> |bqh| cmf@{ label: 'AND'}
+	btv ---> |btv| tdv@{ label: 'AND'}
+	bvp ---> |bvp| stc@{ label: 'AND'}
+	bwg ---> |bwg| djp@{ label: 'AND'}
+	cbs ---> |cbs| qtd@{ label: 'AND'}
+	cds ---> |cds| nph@{ label: 'AND'}
+	cfj ---> |cfj| tdv@{ label: 'AND'}
+	chc ---> |chc| vjh@{ label: 'AND'}
+	chv ---> |chv| cwh@{ label: 'AND'}
+	cjb ---> |cjb| fsb@{ label: 'AND'}
+	cjg ---> |cjg| mdv@{ label: 'AND'}
+	cjw ---> |cjw| dtj@{ label: 'AND'}
+	cmt ---> |cmt| gmc@{ label: 'AND'}
+	cvr ---> |cvr| pjd@{ label: 'AND'}
+	dqj ---> |dqj| tws@{ label: 'AND'}
+	dqp ---> |dqp| hvv@{ label: 'AND'}
+	fbb ---> |fbb| trr@{ label: 'AND'}
+	ffj ---> |ffj| bfk@{ label: 'AND'}
+	fmt ---> |fmt| qnk@{ label: 'AND'}
+	fnq ---> |fnq| mch@{ label: 'AND'}
+	fqf ---> |fqf| cwh@{ label: 'AND'}
+	gdb ---> |gdb| stc@{ label: 'AND'}
+	gtn ---> |gtn| jmk@{ label: 'AND'}
+	gwb ---> |gwb| pkd@{ label: 'AND'}
+	hbw ---> |hbw| kwg@{ label: 'AND'}
+	hck ---> |hck| pjd@{ label: 'AND'}
+	hgh ---> |hgh| rff@{ label: 'AND'}
+	hmr ---> |hmr| hqd@{ label: 'AND'}
+	hmv ---> |hmv| ptf@{ label: 'AND'}
+	htq ---> |htq| dsm@{ label: 'AND'}
+	jfq ---> |jfq| trr@{ label: 'AND'}
+	jjd ---> |jjd| wbw@{ label: 'AND'}
+	jsg ---> |jsg| wdw@{ label: 'AND'}
+	jvp ---> |jvp| gtq@{ label: 'AND'}
+	kbn ---> |kbn| gtq@{ label: 'AND'}
+	kcv ---> |kcv| thc@{ label: 'AND'}
+	kkd ---> |kkd| mdv@{ label: 'AND'}
+	knm ---> |knm| rdj@{ label: 'AND'}
+	ksn ---> |ksn| jpj@{ label: 'AND'}
+	ksp ---> |ksp| dkc@{ label: 'AND'}
+	kvf ---> |kvf| pkd@{ label: 'AND'}
+	mfn ---> |mfn| djp@{ label: 'AND'}
+	mtg ---> |mtg| chg@{ label: 'AND'}
+	mwv ---> |mwv| wdw@{ label: 'AND'}
+	nbm ---> |nbm| hvv@{ label: 'AND'}
+	nbq ---> |nbq| gmc@{ label: 'AND'}
+	nft ---> |nft| jpj@{ label: 'AND'}
+	ntj ---> |ntj| dtj@{ label: 'AND'}
+	pkr ---> |pkr| thc@{ label: 'AND'}
+	ppb ---> |ppb| hqd@{ label: 'AND'}
+	pvj ---> |pvj| dkc@{ label: 'AND'}
+	qcm ---> |qcm| jth@{ label: 'AND'}
+	qdf ---> |qdf| vjf@{ label: 'AND'}
+	qkf ---> |qkf| pqc@{ label: 'AND'}
+	qmt ---> |qmt| jmk@{ label: 'AND'}
+	qpp ---> |qpp| dnf@{ label: 'AND'}
+	qvr ---> |qvr| mch@{ label: 'AND'}
+	rbd ---> |rbd| rdj@{ label: 'AND'}
+	rjc ---> |rjc| fsb@{ label: 'AND'}
+	rjf ---> |rjf| cmf@{ label: 'AND'}
+	rkv ---> |rkv| nph@{ label: 'AND'}
+	rnq ---> |rnq| vjh@{ label: 'AND'}
+	rpg ---> |rpg| bfk@{ label: 'AND'}
+	rrq ---> |rrq| cbv@{ label: 'AND'}
+	rtk ---> |rtk| dsm@{ label: 'AND'}
+	rts ---> |rts| ptf@{ label: 'AND'}
+	scc ---> |scc| bnv@{ label: 'AND'}
+	sch ---> |sch| whj@{ label: 'AND'}
+	sgt ---> |sgt| bnv@{ label: 'AND'}
+	sqm ---> |sqm| chg@{ label: 'AND'}
+	srj ---> |srj| whj@{ label: 'AND'}
+	stg ---> |stg| dnf@{ label: 'AND'}
+	svg ---> |svg| qnk@{ label: 'AND'}
+	svs ---> |svs| rff@{ label: 'AND'}
+	tpf ---> |tpf| tpp@{ label: 'AND'}
+	ttb ---> |ttb| qtd@{ label: 'AND'}
+	twv ---> |twv| jth@{ label: 'AND'}
+	vfm ---> |vfm| kwg@{ label: 'AND'}
+	vgp ---> |vgp| qht@{ label: 'AND'}
+	vhb ---> |vhb| tpp@{ label: 'AND'}
+	vpc ---> |vpc| qht@{ label: 'AND'}
+	wgq ---> |wgq| tws@{ label: 'AND'}
+	whb ---> |whb| wbw@{ label: 'AND'}
+	wsv ---> |wsv| pqc@{ label: 'AND'}
+	www ---> |www| vjf@{ label: 'AND'}
+	bbh ---> |bbh| jfq@{ label: 'OR'}
+	bdf ---> |bdf| qkf@{ label: 'OR'}
+	bfk ---> |bfk| gwb@{ label: 'OR'}
+	bfm ---> |bfm| htq@{ label: 'OR'}
+	bnv ---> |bnv| stg@{ label: 'OR'}
+	bst ---> |bst| stg@{ label: 'OR'}
+	cbv ---> |cbv| gqrORcbv@{ label: 'OR'}
+	cgd ---> |cgd| dqj@{ label: 'OR'}
+	chg ---> |chg| vgp@{ label: 'OR'}
+	cmf ---> |cmf| tpf@{ label: 'OR'}
+	cvn ---> |cvn| cjg@{ label: 'OR'}
+	cwh ---> |cwh| ttb@{ label: 'OR'}
+	djp ---> |djp| qvr@{ label: 'OR'}
+	dkc ---> |dkc| sch@{ label: 'OR'}
+	dnf ---> |dnf| ksp@{ label: 'OR'}
+	dsg ---> |dsg| mwv@{ label: 'OR'}
+	dsm ---> |dsm| ksn@{ label: 'OR'}
+	dtj ---> |dtj| jvp@{ label: 'OR'}
+	fpr ---> |fpr| hgh@{ label: 'OR'}
+	fsb ---> |fsb| nbm@{ label: 'OR'}
+	gmc ---> |gmc| sgt@{ label: 'OR'}
+	gqr ---> |gqr| gqrORcbv@{ label: 'OR'}
+	gtb ---> |gtb| gtn@{ label: 'OR'}
+	gtq ---> |gtq| fmt@{ label: 'OR'}
+	gwq ---> |gwq| sgt@{ label: 'OR'}
+	hqd ---> |hqd| hgh@{ label: 'OR'}
+	htr ---> |htr| rjc@{ label: 'OR'}
+	hvv ---> |hvv| gtn@{ label: 'OR'}
+	jjm ---> |jjm| nbm@{ label: 'OR'}
+	jkm ---> |jkm| rjf@{ label: 'OR'}
+	jmk ---> |jmk| rkv@{ label: 'OR'}
+	jpj ---> |jpj| bwg@{ label: 'OR'}
+	jrr ---> |jrr| sqm@{ label: 'OR'}
+	jth ---> |jth| dqj@{ label: 'OR'}
+	jvm ---> |jvm| gwb@{ label: 'OR'}
+	kfn ---> |kfn| hck@{ label: 'OR'}
+	kfv ---> |kfv| gdb@{ label: 'OR'}
+	kgj ---> |kgj| www@{ label: 'OR'}
+	kwg ---> |kwg| pkr@{ label: 'OR'}
+	mch ---> |mch| ppb@{ label: 'OR'}
+	mdv ---> |mdv| rnq@{ label: 'OR'}
+	mkg ---> |mkg| sch@{ label: 'OR'}
+	mmb ---> |mmb| fqf@{ label: 'OR'}
+	mqn ---> |mqn| bwg@{ label: 'OR'}
+	mts ---> |mts| rpg@{ label: 'OR'}
+	nph ---> |nph| rts@{ label: 'OR'}
+	nvw ---> |nvw| vgp@{ label: 'OR'}
+	pfb ---> |pfb| qvr@{ label: 'OR'}
+	pfj ---> |pfj| twv@{ label: 'OR'}
+	pjd ---> |pjd| mwv@{ label: 'OR'}
+	pkd ---> |pkd| rjf@{ label: 'OR'}
+	pkj ---> |pkj| ksp@{ label: 'OR'}
+	pnn ---> |pnn| bmp@{ label: 'OR'}
+	pqc ---> |pqc| bkh@{ label: 'OR'}
+	prp ---> |prp| hbw@{ label: 'OR'}
+	ptf ---> |ptf| sqm@{ label: 'OR'}
+	qgf ---> |qgf| fmt@{ label: 'OR'}
+	qht ---> |qht| htq@{ label: 'OR'}
+	qnk ---> |qnk| cjg@{ label: 'OR'}
+	qtd ---> |qtd| jfq@{ label: 'OR'}
+	rdj ---> |rdj| gdb@{ label: 'OR'}
+	rff ---> |rff| rpg@{ label: 'OR'}
+	rft ---> |rft| rnq@{ label: 'OR'}
+	rhq ---> |rhq| rjc@{ label: 'OR'}
+	sdj ---> |sdj| rts@{ label: 'OR'}
+	smr ---> |smr| ksn@{ label: 'OR'}
+	sqt ---> |sqt| rbd@{ label: 'OR'}
+	ssv ---> |ssv| rkv@{ label: 'OR'}
+	stc ---> |stc| www@{ label: 'OR'}
+	tdv ---> |tdv| cjw@{ label: 'OR'}
+	tfr ---> |tfr| ppb@{ label: 'OR'}
+	thc ---> |thc| rbd@{ label: 'OR'}
+	tpp ---> |tpp| twv@{ label: 'OR'}
+	trr ---> |trr| hck@{ label: 'OR'}
+	tws ---> |tws| hbw@{ label: 'OR'}
+	vdf ---> |vdf| bkh@{ label: 'OR'}
+	vjf ---> |vjf| btv@{ label: 'OR'}
+	vjh ---> |vjh| fqf@{ label: 'OR'}
+	vjr ---> |vjr| pkr@{ label: 'OR'}
+	vqt ---> |vqt| cmt@{ label: 'OR'}
+	vvq ---> |vvq| jvp@{ label: 'OR'}
+	vvw ---> |vvw| ttb@{ label: 'OR'}
+	wbw ---> |wbw| qkf@{ label: 'OR'}
+	wdw ---> |wdw| cmt@{ label: 'OR'}
+	whj ---> |whj| bmp@{ label: 'OR'}
+	wjp ---> |wjp| cjw@{ label: 'OR'}
+	wqs ---> |wqs| tpf@{ label: 'OR'}
+	wth ---> |wth| btv@{ label: 'OR'}
+	bcj ---> |bcj| bcjXORbkh@{ label: 'XOR'}
+	bkh ---> |bkh| bcjXORbkh@{ label: 'XOR'}
+	bmp ---> |bmp| rrqXORbmp@{ label: 'XOR'}
+	bqh ---> |bqh| bqhXORrjf@{ label: 'XOR'}
+	btv ---> |btv| btvXORcfj@{ label: 'XOR'}
+	bvp ---> |bvp| bvpXORgdb@{ label: 'XOR'}
+	bwg ---> |bwg| bwgXORmfn@{ label: 'XOR'}
+	cbs ---> |cbs| cbsXORttb@{ label: 'XOR'}
+	cds ---> |cds| cdsXORrkv@{ label: 'XOR'}
+	cfj ---> |cfj| btvXORcfj@{ label: 'XOR'}
+	chc ---> |chc| chcXORrnq@{ label: 'XOR'}
+	chv ---> |chv| chvXORfqf@{ label: 'XOR'}
+	cjb ---> |cjb| cjbXORrjc@{ label: 'XOR'}
+	cjg ---> |cjg| kkdXORcjg@{ label: 'XOR'}
+	cjw ---> |cjw| ntjXORcjw@{ label: 'XOR'}
+	cmt ---> |cmt| nbqXORcmt@{ label: 'XOR'}
+	cvr ---> |cvr| hckXORcvr@{ label: 'XOR'}
+	dqj ---> |dqj| wgqXORdqj@{ label: 'XOR'}
+	dqp ---> |dqp| nbmXORdqp@{ label: 'XOR'}
+	fbb ---> |fbb| jfqXORfbb@{ label: 'XOR'}
+	ffj ---> |ffj| ffjXORrpg@{ label: 'XOR'}
+	fmt ---> |fmt| svgXORfmt@{ label: 'XOR'}
+	fnq ---> |fnq| qvrXORfnq@{ label: 'XOR'}
+	fqf ---> |fqf| chvXORfqf@{ label: 'XOR'}
+	gdb ---> |gdb| bvpXORgdb@{ label: 'XOR'}
+	gtn ---> |gtn| gtnXORqmt@{ label: 'XOR'}
+	gwb ---> |gwb| kvfXORgwb@{ label: 'XOR'}
+	hbw ---> |hbw| vfmXORhbw@{ label: 'XOR'}
+	hck ---> |hck| hckXORcvr@{ label: 'XOR'}
+	hgh ---> |hgh| svsXORhgh@{ label: 'XOR'}
+	hmr ---> |hmr| ppbXORhmr@{ label: 'XOR'}
+	hmv ---> |hmv| hmvXORrts@{ label: 'XOR'}
+	htq ---> |htq| rtkXORhtq@{ label: 'XOR'}
+	jfq ---> |jfq| jfqXORfbb@{ label: 'XOR'}
+	jjd ---> |jjd| jjdXORwhb@{ label: 'XOR'}
+	jsg ---> |jsg| mwvXORjsg@{ label: 'XOR'}
+	jvp ---> |jvp| kbnXORjvp@{ label: 'XOR'}
+	kbn ---> |kbn| kbnXORjvp@{ label: 'XOR'}
+	kcv ---> |kcv| kcvXORpkr@{ label: 'XOR'}
+	kkd ---> |kkd| kkdXORcjg@{ label: 'XOR'}
+	knm ---> |knm| rbdXORknm@{ label: 'XOR'}
+	ksn ---> |ksn| ksnXORnft@{ label: 'XOR'}
+	ksp ---> |ksp| pvjXORksp@{ label: 'XOR'}
+	kvf ---> |kvf| kvfXORgwb@{ label: 'XOR'}
+	mfn ---> |mfn| bwgXORmfn@{ label: 'XOR'}
+	mtg ---> |mtg| mtgXORsqm@{ label: 'XOR'}
+	mwv ---> |mwv| mwvXORjsg@{ label: 'XOR'}
+	nbm ---> |nbm| nbmXORdqp@{ label: 'XOR'}
+	nbq ---> |nbq| nbqXORcmt@{ label: 'XOR'}
+	nft ---> |nft| ksnXORnft@{ label: 'XOR'}
+	ntj ---> |ntj| ntjXORcjw@{ label: 'XOR'}
+	pkr ---> |pkr| kcvXORpkr@{ label: 'XOR'}
+	ppb ---> |ppb| ppbXORhmr@{ label: 'XOR'}
+	pvj ---> |pvj| pvjXORksp@{ label: 'XOR'}
+	qcm ---> |qcm| qcmXORtwv@{ label: 'XOR'}
+	qdf ---> |qdf| wwwXORqdf@{ label: 'XOR'}
+	qkf ---> |qkf| qkfXORwsv@{ label: 'XOR'}
+	qmt ---> |qmt| gtnXORqmt@{ label: 'XOR'}
+	qpp ---> |qpp| qppXORstg@{ label: 'XOR'}
+	qvr ---> |qvr| qvrXORfnq@{ label: 'XOR'}
+	rbd ---> |rbd| rbdXORknm@{ label: 'XOR'}
+	rjc ---> |rjc| cjbXORrjc@{ label: 'XOR'}
+	rjf ---> |rjf| bqhXORrjf@{ label: 'XOR'}
+	rkv ---> |rkv| cdsXORrkv@{ label: 'XOR'}
+	rnq ---> |rnq| chcXORrnq@{ label: 'XOR'}
+	rpg ---> |rpg| ffjXORrpg@{ label: 'XOR'}
+	rrq ---> |rrq| rrqXORbmp@{ label: 'XOR'}
+	rtk ---> |rtk| rtkXORhtq@{ label: 'XOR'}
+	rts ---> |rts| hmvXORrts@{ label: 'XOR'}
+	scc ---> |scc| sgtXORscc@{ label: 'XOR'}
+	sch ---> |sch| srjXORsch@{ label: 'XOR'}
+	sgt ---> |sgt| sgtXORscc@{ label: 'XOR'}
+	sqm ---> |sqm| mtgXORsqm@{ label: 'XOR'}
+	srj ---> |srj| srjXORsch@{ label: 'XOR'}
+	stg ---> |stg| qppXORstg@{ label: 'XOR'}
+	svg ---> |svg| svgXORfmt@{ label: 'XOR'}
+	svs ---> |svs| svsXORhgh@{ label: 'XOR'}
+	tpf ---> |tpf| tpfXORvhb@{ label: 'XOR'}
+	ttb ---> |ttb| cbsXORttb@{ label: 'XOR'}
+	twv ---> |twv| qcmXORtwv@{ label: 'XOR'}
+	vfm ---> |vfm| vfmXORhbw@{ label: 'XOR'}
+	vgp ---> |vgp| vpcXORvgp@{ label: 'XOR'}
+	vhb ---> |vhb| tpfXORvhb@{ label: 'XOR'}
+	vpc ---> |vpc| vpcXORvgp@{ label: 'XOR'}
+	wgq ---> |wgq| wgqXORdqj@{ label: 'XOR'}
+	whb ---> |whb| jjdXORwhb@{ label: 'XOR'}
+	wsv ---> |wsv| qkfXORwsv@{ label: 'XOR'}
+	www ---> |www| wwwXORqdf@{ label: 'XOR'}
+	x00 ---> |x00| whb@{ label: 'AND'}
+	y00 ---> |y00| whb@{ label: 'AND'}
+	x01 ---> |x01| bdf@{ label: 'AND'}
+	y01 ---> |y01| bdf@{ label: 'AND'}
+	x02 ---> |x02| vdf@{ label: 'AND'}
+	y02 ---> |y02| vdf@{ label: 'AND'}
+	x03 ---> |x03| htr@{ label: 'AND'}
+	y03 ---> |y03| htr@{ label: 'AND'}
+	x04 ---> |x04| jjm@{ label: 'AND'}
+	y04 ---> |y04| jjm@{ label: 'AND'}
+	x05 ---> |x05| gtb@{ label: 'AND'}
+	y05 ---> |y05| gtb@{ label: 'AND'}
+	x06 ---> |x06| ssv@{ label: 'AND'}
+	y06 ---> |y06| ssv@{ label: 'AND'}
+	x07 ---> |x07| sdj@{ label: 'AND'}
+	y07 ---> |y07| sdj@{ label: 'AND'}
+	x08 ---> |x08| jrr@{ label: 'AND'}
+	y08 ---> |y08| jrr@{ label: 'AND'}
+	x09 ---> |x09| nvw@{ label: 'AND'}
+	y09 ---> |y09| nvw@{ label: 'AND'}
+	x10 ---> |x10| bfm@{ label: 'AND'}
+	y10 ---> |y10| bfm@{ label: 'AND'}
+	x11 ---> |x11| smr@{ label: 'AND'}
+	y11 ---> |y11| smr@{ label: 'AND'}
+	x12 ---> |x12| mqn@{ label: 'AND'}
+	y12 ---> |y12| mqn@{ label: 'AND'}
+	x13 ---> |x13| pfb@{ label: 'AND'}
+	y13 ---> |y13| pfb@{ label: 'AND'}
+	x14 ---> |x14| tfr@{ label: 'AND'}
+	y14 ---> |y14| tfr@{ label: 'AND'}
+	x15 ---> |x15| fpr@{ label: 'AND'}
+	y15 ---> |y15| fpr@{ label: 'AND'}
+	x16 ---> |x16| mts@{ label: 'AND'}
+	y16 ---> |y16| mts@{ label: 'AND'}
+	x17 ---> |x17| jvm@{ label: 'AND'}
+	y17 ---> |y17| jvm@{ label: 'AND'}
+	x18 ---> |x18| jkm@{ label: 'AND'}
+	y18 ---> |y18| jkm@{ label: 'AND'}
+	x19 ---> |x19| wqs@{ label: 'AND'}
+	y19 ---> |y19| wqs@{ label: 'AND'}
+	x20 ---> |x20| pfj@{ label: 'AND'}
+	y20 ---> |y20| pfj@{ label: 'AND'}
+	x21 ---> |x21| cgd@{ label: 'AND'}
+	y21 ---> |y21| cgd@{ label: 'AND'}
+	x22 ---> |x22| prp@{ label: 'AND'}
+	y22 ---> |y22| prp@{ label: 'AND'}
+	x23 ---> |x23| vjr@{ label: 'AND'}
+	y23 ---> |y23| vjr@{ label: 'AND'}
+	x24 ---> |x24| sqt@{ label: 'AND'}
+	y24 ---> |y24| sqt@{ label: 'AND'}
+	x25 ---> |x25| kfv@{ label: 'AND'}
+	y25 ---> |y25| kfv@{ label: 'AND'}
+	x26 ---> |x26| kgj@{ label: 'AND'}
+	y26 ---> |y26| kgj@{ label: 'AND'}
+	x27 ---> |x27| wth@{ label: 'AND'}
+	y27 ---> |y27| wth@{ label: 'AND'}
+	x28 ---> |x28| wjp@{ label: 'AND'}
+	y28 ---> |y28| wjp@{ label: 'AND'}
+	x29 ---> |x29| vvq@{ label: 'AND'}
+	y29 ---> |y29| vvq@{ label: 'AND'}
+	x30 ---> |x30| qgf@{ label: 'AND'}
+	y30 ---> |y30| qgf@{ label: 'AND'}
+	x31 ---> |x31| cvn@{ label: 'AND'}
+	y31 ---> |y31| cvn@{ label: 'AND'}
+	x32 ---> |x32| rft@{ label: 'AND'}
+	y32 ---> |y32| rft@{ label: 'AND'}
+	x33 ---> |x33| mmb@{ label: 'AND'}
+	y33 ---> |y33| mmb@{ label: 'AND'}
+	x34 ---> |x34| vvw@{ label: 'AND'}
+	y34 ---> |y34| vvw@{ label: 'AND'}
+	x35 ---> |x35| bbh@{ label: 'AND'}
+	y35 ---> |y35| bbh@{ label: 'AND'}
+	x36 ---> |x36| kfn@{ label: 'AND'}
+	y36 ---> |y36| kfn@{ label: 'AND'}
+	x37 ---> |x37| dsg@{ label: 'AND'}
+	y37 ---> |y37| dsg@{ label: 'AND'}
+	x38 ---> |x38| vqt@{ label: 'AND'}
+	y38 ---> |y38| vqt@{ label: 'AND'}
+	x39 ---> |x39| gwq@{ label: 'AND'}
+	y39 ---> |y39| gwq@{ label: 'AND'}
+	x40 ---> |x40| bst@{ label: 'AND'}
+	y40 ---> |y40| bst@{ label: 'AND'}
+	x41 ---> |x41| pkj@{ label: 'AND'}
+	y41 ---> |y41| pkj@{ label: 'AND'}
+	x42 ---> |x42| mkg@{ label: 'AND'}
+	y42 ---> |y42| mkg@{ label: 'AND'}
+	x43 ---> |x43| pnn@{ label: 'AND'}
+	y43 ---> |y43| pnn@{ label: 'AND'}
+	x44 ---> |x44| gqr@{ label: 'AND'}
+	y44 ---> |y44| gqr@{ label: 'AND'}
+	x00 ---> |x00| x00XORy00@{ label: 'XOR'}
+	y00 ---> |y00| x00XORy00@{ label: 'XOR'}
+	x01 ---> |x01| jjd@{ label: 'XOR'}
+	y01 ---> |y01| jjd@{ label: 'XOR'}
+	x02 ---> |x02| wsv@{ label: 'XOR'}
+	y02 ---> |y02| wsv@{ label: 'XOR'}
+	x03 ---> |x03| bcj@{ label: 'XOR'}
+	y03 ---> |y03| bcj@{ label: 'XOR'}
+	x04 ---> |x04| cjb@{ label: 'XOR'}
+	y04 ---> |y04| cjb@{ label: 'XOR'}
+	x05 ---> |x05| dqp@{ label: 'XOR'}
+	y05 ---> |y05| dqp@{ label: 'XOR'}
+	x06 ---> |x06| qmt@{ label: 'XOR'}
+	y06 ---> |y06| qmt@{ label: 'XOR'}
+	x07 ---> |x07| cds@{ label: 'XOR'}
+	y07 ---> |y07| cds@{ label: 'XOR'}
+	x08 ---> |x08| hmv@{ label: 'XOR'}
+	y08 ---> |y08| hmv@{ label: 'XOR'}
+	x09 ---> |x09| mtg@{ label: 'XOR'}
+	y09 ---> |y09| mtg@{ label: 'XOR'}
+	x10 ---> |x10| vpc@{ label: 'XOR'}
+	y10 ---> |y10| vpc@{ label: 'XOR'}
+	x11 ---> |x11| rtk@{ label: 'XOR'}
+	y11 ---> |y11| rtk@{ label: 'XOR'}
+	x12 ---> |x12| nft@{ label: 'XOR'}
+	y12 ---> |y12| nft@{ label: 'XOR'}
+	x13 ---> |x13| mfn@{ label: 'XOR'}
+	y13 ---> |y13| mfn@{ label: 'XOR'}
+	x14 ---> |x14| fnq@{ label: 'XOR'}
+	y14 ---> |y14| fnq@{ label: 'XOR'}
+	x15 ---> |x15| hmr@{ label: 'XOR'}
+	y15 ---> |y15| hmr@{ label: 'XOR'}
+	x16 ---> |x16| svs@{ label: 'XOR'}
+	y16 ---> |y16| svs@{ label: 'XOR'}
+	x17 ---> |x17| ffj@{ label: 'XOR'}
+	y17 ---> |y17| ffj@{ label: 'XOR'}
+	x18 ---> |x18| kvf@{ label: 'XOR'}
+	y18 ---> |y18| kvf@{ label: 'XOR'}
+	x19 ---> |x19| bqh@{ label: 'XOR'}
+	y19 ---> |y19| bqh@{ label: 'XOR'}
+	x20 ---> |x20| vhb@{ label: 'XOR'}
+	y20 ---> |y20| vhb@{ label: 'XOR'}
+	x21 ---> |x21| qcm@{ label: 'XOR'}
+	y21 ---> |y21| qcm@{ label: 'XOR'}
+	x22 ---> |x22| wgq@{ label: 'XOR'}
+	y22 ---> |y22| wgq@{ label: 'XOR'}
+	x23 ---> |x23| vfm@{ label: 'XOR'}
+	y23 ---> |y23| vfm@{ label: 'XOR'}
+	x24 ---> |x24| kcv@{ label: 'XOR'}
+	y24 ---> |y24| kcv@{ label: 'XOR'}
+	x25 ---> |x25| knm@{ label: 'XOR'}
+	y25 ---> |y25| knm@{ label: 'XOR'}
+	x26 ---> |x26| bvp@{ label: 'XOR'}
+	y26 ---> |y26| bvp@{ label: 'XOR'}
+	x27 ---> |x27| qdf@{ label: 'XOR'}
+	y27 ---> |y27| qdf@{ label: 'XOR'}
+	x28 ---> |x28| cfj@{ label: 'XOR'}
+	y28 ---> |y28| cfj@{ label: 'XOR'}
+	x29 ---> |x29| ntj@{ label: 'XOR'}
+	y29 ---> |y29| ntj@{ label: 'XOR'}
+	x30 ---> |x30| kbn@{ label: 'XOR'}
+	y30 ---> |y30| kbn@{ label: 'XOR'}
+	x31 ---> |x31| svg@{ label: 'XOR'}
+	y31 ---> |y31| svg@{ label: 'XOR'}
+	x32 ---> |x32| kkd@{ label: 'XOR'}
+	y32 ---> |y32| kkd@{ label: 'XOR'}
+	x33 ---> |x33| chc@{ label: 'XOR'}
+	y33 ---> |y33| chc@{ label: 'XOR'}
+	x34 ---> |x34| chv@{ label: 'XOR'}
+	y34 ---> |y34| chv@{ label: 'XOR'}
+	x35 ---> |x35| cbs@{ label: 'XOR'}
+	y35 ---> |y35| cbs@{ label: 'XOR'}
+	x36 ---> |x36| fbb@{ label: 'XOR'}
+	y36 ---> |y36| fbb@{ label: 'XOR'}
+	x37 ---> |x37| cvr@{ label: 'XOR'}
+	y37 ---> |y37| cvr@{ label: 'XOR'}
+	x38 ---> |x38| jsg@{ label: 'XOR'}
+	y38 ---> |y38| jsg@{ label: 'XOR'}
+	x39 ---> |x39| nbq@{ label: 'XOR'}
+	y39 ---> |y39| nbq@{ label: 'XOR'}
+	x40 ---> |x40| scc@{ label: 'XOR'}
+	y40 ---> |y40| scc@{ label: 'XOR'}
+	x41 ---> |x41| qpp@{ label: 'XOR'}
+	y41 ---> |y41| qpp@{ label: 'XOR'}
+	x42 ---> |x42| pvj@{ label: 'XOR'}
+	y42 ---> |y42| pvj@{ label: 'XOR'}
+	x43 ---> |x43| srj@{ label: 'XOR'}
+	y43 ---> |y43| srj@{ label: 'XOR'}
+	x44 ---> |x44| rrq@{ label: 'XOR'}
+	y44 ---> |y44| rrq@{ label: 'XOR'}
+	x00XORy00@{ label: 'XOR'} ---> |z00| z00
+	jjdXORwhb@{ label: 'XOR'} ---> |z01| z01
+	qkfXORwsv@{ label: 'XOR'} ---> |z02| z02
+	bcjXORbkh@{ label: 'XOR'} ---> |z03| z03
+	cjbXORrjc@{ label: 'XOR'} ---> |z04| z04
+	nbmXORdqp@{ label: 'XOR'} ---> |z05| z05
+	gtnXORqmt@{ label: 'XOR'} ---> |z06| z06
+	cdsXORrkv@{ label: 'XOR'} ---> |z07| z07
+	hmvXORrts@{ label: 'XOR'} ---> |z08| z08
+	mtgXORsqm@{ label: 'XOR'} ---> |z09| z09
+	vpcXORvgp@{ label: 'XOR'} ---> |z10| z10
+	rtkXORhtq@{ label: 'XOR'} ---> |z11| z11
+	ksnXORnft@{ label: 'XOR'} ---> |z12| z12
+	bwgXORmfn@{ label: 'XOR'} ---> |z13| z13
+	qvrXORfnq@{ label: 'XOR'} ---> |z14| z14
+	ppbXORhmr@{ label: 'XOR'} ---> |z15| z15
+	svsXORhgh@{ label: 'XOR'} ---> |z16| z16
+	ffjXORrpg@{ label: 'XOR'} ---> |z17| z17
+	kvfXORgwb@{ label: 'XOR'} ---> |z18| z18
+	bqhXORrjf@{ label: 'XOR'} ---> |z19| z19
+	tpfXORvhb@{ label: 'XOR'} ---> |z20| z20
+	qcmXORtwv@{ label: 'XOR'} ---> |z21| z21
+	wgqXORdqj@{ label: 'XOR'} ---> |z22| z22
+	vfmXORhbw@{ label: 'XOR'} ---> |z23| z23
+	kcvXORpkr@{ label: 'XOR'} ---> |z24| z24
+	rbdXORknm@{ label: 'XOR'} ---> |z25| z25
+	bvpXORgdb@{ label: 'XOR'} ---> |z26| z26
+	wwwXORqdf@{ label: 'XOR'} ---> |z27| z27
+	btvXORcfj@{ label: 'XOR'} ---> |z28| z28
+	ntjXORcjw@{ label: 'XOR'} ---> |z29| z29
+	kbnXORjvp@{ label: 'XOR'} ---> |z30| z30
+	svgXORfmt@{ label: 'XOR'} ---> |z31| z31
+	kkdXORcjg@{ label: 'XOR'} ---> |z32| z32
+	chcXORrnq@{ label: 'XOR'} ---> |z33| z33
+	chvXORfqf@{ label: 'XOR'} ---> |z34| z34
+	cbsXORttb@{ label: 'XOR'} ---> |z35| z35
+	jfqXORfbb@{ label: 'XOR'} ---> |z36| z36
+	hckXORcvr@{ label: 'XOR'} ---> |z37| z37
+	mwvXORjsg@{ label: 'XOR'} ---> |z38| z38
+	nbqXORcmt@{ label: 'XOR'} ---> |z39| z39
+	sgtXORscc@{ label: 'XOR'} ---> |z40| z40
+	qppXORstg@{ label: 'XOR'} ---> |z41| z41
+	pvjXORksp@{ label: 'XOR'} ---> |z42| z42
+	srjXORsch@{ label: 'XOR'} ---> |z43| z43
+	rrqXORbmp@{ label: 'XOR'} ---> |z44| z44
+	gqrORcbv@{ label: 'OR'} ---> |z45| z45

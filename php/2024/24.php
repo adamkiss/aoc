@@ -148,7 +148,68 @@ function part1 (string $input) {
 	return intval(join('', $zs), 2);
 }
 
-function part2 (string $input) {
+function sort_val(string $op, string $c) {
+	return match(true) {
+		str_starts_with($c, 'x') || str_starts_with($c, 'y') =>
+			'aa'.$op.substr($c, 1).substr($c, 0, 1), // x000 => aaa000x
+		str_starts_with($c, 'z') => $c.$op,
+		default => $op.$c
+	};
+}
+
+function part2 (string $input, string $diakey) {
+	[$c_raw , $g_raw] = explode("\n\n", $input);
+	$xzcount = (int) count(explode("\n", $c_raw)) / 2;
+
+	$diagram = [
+		'flowchart TD'
+	];
+
+	for ($i=0; $i < $xzcount; $i++) {
+		$k = sprintf('%s%02d', 'x', $i);
+		$diagram [] = "\t{$k}@{ shape: framed-circle, label: '{$k}'}";
+		$k = sprintf('%s%02d', 'y', $i);
+		$diagram [] = "\t{$k}@{ shape: framed-circle, label: '{$k}'}";
+	}
+	for ($i=0; $i < $xzcount+1; $i++) {
+		$k = sprintf('%s%02d', 'z', $i);
+		$diagram [] = "\t{$k}@{ shape: framed-circle, label: '{$k}'}";
+	}
+
+	$switch = [
+		'rts' => 'z07',
+		'z07' => 'rts',
+		'jpj' => 'z12',
+		'z12' => 'jpj',
+		'kgj' => 'z26',
+		'z26' => 'kgj',
+		'chv' => 'vvw',
+		'vvw' => 'chv',
+	];
+
+	$conn = [];
+	foreach (explode("\n", $g_raw) as $g) {
+		[$c1, $op, $c2, , $co] = explode(' ', $g);
+
+		$co = $switch[$co] ?? $co;
+
+		$opcon = "$c1$op$c2@{ label: '$op'}";
+
+		if (str_starts_with($co, 'z')) {
+			$conn []= ["\t$c1 ---> |$c1| $opcon", sort_val($op, $c1)];
+			$conn []= ["\t$c2 ---> |$c2| $opcon", sort_val($op, $c2)];
+			$conn []= ["\t$opcon ---> |$co| $co", sort_val($op, $co)];
+		} else {
+			$conn []= ["\t$c1 ---> |$c1| $co@{ label: '$op'}", sort_val($op, $c1)];
+			$conn []= ["\t$c2 ---> |$c2| $co@{ label: '$op'}", sort_val($op, $c2)];
+		}
+	}
+
+	usort($conn, fn ($a, $b) => $a[1] <=> $b[1]);
+	$diagram = array_merge($diagram, array_map(fn($c) => $c[0], $conn));
+
+	// $i = count($conn);
+	F::write(__DIR__ . "/outputs/24-{$diakey}.txt", join("\n", $diagram));
 
 	return true;
 }
@@ -174,13 +235,13 @@ printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 // 2
 $p = microtime(true);
-$r = part2($input_demo3);
+$r = part2($input_demo3, 'demo');
 println('2) Result of demo: ' . $r);
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 assert($r === true);
 
 $p = microtime(true);
-println('2) Result of real input: ' . part2($input));
+println('2) Result of real input: ' . part2($input, 'real'));
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);

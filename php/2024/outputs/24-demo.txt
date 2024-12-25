@@ -1,0 +1,38 @@
+flowchart TD
+	x00@{ shape: framed-circle, label: 'x00'}
+	y00@{ shape: framed-circle, label: 'y00'}
+	x01@{ shape: framed-circle, label: 'x01'}
+	y01@{ shape: framed-circle, label: 'y01'}
+	x02@{ shape: framed-circle, label: 'x02'}
+	y02@{ shape: framed-circle, label: 'y02'}
+	x03@{ shape: framed-circle, label: 'x03'}
+	y03@{ shape: framed-circle, label: 'y03'}
+	x04@{ shape: framed-circle, label: 'x04'}
+	y04@{ shape: framed-circle, label: 'y04'}
+	x05@{ shape: framed-circle, label: 'x05'}
+	y05@{ shape: framed-circle, label: 'y05'}
+	z00@{ shape: framed-circle, label: 'z00'}
+	z01@{ shape: framed-circle, label: 'z01'}
+	z02@{ shape: framed-circle, label: 'z02'}
+	z03@{ shape: framed-circle, label: 'z03'}
+	z04@{ shape: framed-circle, label: 'z04'}
+	z05@{ shape: framed-circle, label: 'z05'}
+	z06@{ shape: framed-circle, label: 'z06'}
+	x00 ---> |x00| x00ANDy00@{ label: 'AND'}
+	y00 ---> |y00| x00ANDy00@{ label: 'AND'}
+	x01 ---> |x01| x01ANDy01@{ label: 'AND'}
+	y01 ---> |y01| x01ANDy01@{ label: 'AND'}
+	x02 ---> |x02| x02ANDy02@{ label: 'AND'}
+	y02 ---> |y02| x02ANDy02@{ label: 'AND'}
+	x03 ---> |x03| x03ANDy03@{ label: 'AND'}
+	y03 ---> |y03| x03ANDy03@{ label: 'AND'}
+	x04 ---> |x04| x04ANDy04@{ label: 'AND'}
+	y04 ---> |y04| x04ANDy04@{ label: 'AND'}
+	x05 ---> |x05| x05ANDy05@{ label: 'AND'}
+	y05 ---> |y05| x05ANDy05@{ label: 'AND'}
+	x05ANDy05@{ label: 'AND'} ---> |z00| z00
+	x02ANDy02@{ label: 'AND'} ---> |z01| z01
+	x01ANDy01@{ label: 'AND'} ---> |z02| z02
+	x03ANDy03@{ label: 'AND'} ---> |z03| z03
+	x04ANDy04@{ label: 'AND'} ---> |z04| z04
+	x00ANDy00@{ label: 'AND'} ---> |z05| z05
