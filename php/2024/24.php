@@ -211,7 +211,9 @@ function part2 (string $input, string $diakey) {
 	// $i = count($conn);
 	F::write(__DIR__ . "/outputs/24-{$diakey}.txt", join("\n", $diagram));
 
-	return true;
+	ksort($switch);
+
+	return join(',', array_keys($switch));
 }
 
 $s = microtime(true);
@@ -234,12 +236,6 @@ println('1) Result of real input: ' . part1($input));
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 // 2
-$p = microtime(true);
-$r = part2($input_demo3, 'demo');
-println('2) Result of demo: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
-assert($r === true);
-
 $p = microtime(true);
 println('2) Result of real input: ' . part2($input, 'real'));
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
