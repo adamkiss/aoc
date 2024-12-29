@@ -65,7 +65,7 @@ const DEBUG = false;
 
 $cache = [];
 
-function solveArrowpadsStr(string $for, int $level) : string {
+function solveArrowpadsStr(string $for, int $level): string {
 	// PRINT_DEBUG4LYFE
 	if (DEBUG) {
 		println($level, $for);
@@ -83,11 +83,11 @@ function solveArrowpadsStr(string $for, int $level) : string {
 			$sum .= 'A';
 			continue;
 		}
-		$id = $cut.$level;
+		$id = $cut . $level;
 		if (!isset($cache[$id])) {
 			$cA = "A{$cut}";
 			$str = '';
-			for ($i=0; $i < strlen($cA)-1; $i++) {
+			for ($i = 0; $i < strlen($cA) - 1; $i++) {
 				$str .= ARROWPAD[$cA[$i]][$cA[$i + 1]];
 			}
 			$cache[$id] = solveArrowpadsStr($str, $level - 1);
@@ -95,12 +95,12 @@ function solveArrowpadsStr(string $for, int $level) : string {
 		$sum .= $cache[$id];
 	}
 	if (DEBUG) {
-		println('S'.$level, $sum);
+		println('S' . $level, $sum);
 	}
 	return $sum;
 }
 
-function solveArrowpads(string $for, int $level) : int {
+function solveArrowpads(string $for, int $level): int {
 	global $cache;
 	if ($level === 0) {
 		return strlen($for);
@@ -114,11 +114,11 @@ function solveArrowpads(string $for, int $level) : int {
 			$sum += 1;
 			continue;
 		}
-		$id = $cut.$level;
+		$id = $cut . $level;
 		if (!isset($cache[$id])) {
 			$cA = "A{$cut}";
 			$str = '';
-			for ($i=0; $i < strlen($cA)-1; $i++) {
+			for ($i = 0; $i < strlen($cA) - 1; $i++) {
 				$str .= ARROWPAD[$cA[$i]][$cA[$i + 1]];
 			}
 			$cache[$id] = solveArrowpads($str, $level - 1);
@@ -134,8 +134,8 @@ function solveStr(string $c, int $levels): string {
 	}
 	$cA = "A{$c}";
 	$str = '';
-	for ($j=0; $j < strlen($cA)-1; $j++) {
-		[$ax, $ay] = KEYPAD[$cA[$j+1]];
+	for ($j = 0; $j < strlen($cA) - 1; $j++) {
+		[$ax, $ay] = KEYPAD[$cA[$j + 1]];
 		[$bx, $by] = KEYPAD[$cA[$j]];
 		$dx = $ax - $bx;
 		$dy = $ay - $by;
@@ -159,8 +159,8 @@ function solveStr(string $c, int $levels): string {
 function solve(string $c, int $levels): int {
 	$cA = "A{$c}";
 	$str = '';
-	for ($j=0; $j < strlen($cA)-1; $j++) {
-		[$ax, $ay] = KEYPAD[$cA[$j+1]];
+	for ($j = 0; $j < strlen($cA) - 1; $j++) {
+		[$ax, $ay] = KEYPAD[$cA[$j + 1]];
 		[$bx, $by] = KEYPAD[$cA[$j]];
 		$dx = $ax - $bx;
 		$dy = $ay - $by;
@@ -183,7 +183,7 @@ function solve(string $c, int $levels): int {
 	return solveArrowpads($str, $levels - 1);
 }
 
-function part1 (string $input) {
+function part1(string $input) {
 	$codes = array_reduce(explode("\n", $input), function ($acc, $c) {
 		$acc[$c] = intval($c, 10);
 		return $acc;
@@ -199,7 +199,7 @@ function part1 (string $input) {
 	return $sum;
 }
 
-function part2 (string $input) {
+function part2(string $input) {
 	$codes = array_reduce(explode("\n", $input), function ($acc, $c) {
 		$acc[$c] = intval($c, 10);
 		return $acc;
@@ -219,23 +219,23 @@ $s = microtime(true);
 $p = microtime(true);
 $r = part1($input_demo);
 println('1) Result of demo: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 126384);
 
 $p = microtime(true);
 $r = part1($input);
 println('1) Result of real input: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 128962);
 
 // 2
 $p = microtime(true);
 $r = part2($input);
 println('2) Result of real input: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r !== 189612006449478); // incorrect
 assert($r !== 156714718114678); // incorrect
 assert($r > 156714718114678 && $r < 189612006449478);
 // assert($r !== 159684145150108); // found smaller (LOL)
 
-printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
+printf("TOTAL: %.3fms\n", (microtime(true) - $s) * 1000);

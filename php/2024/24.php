@@ -1,6 +1,5 @@
 <?php
 
-use Ds\Queue;
 use Kirby\Filesystem\F;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -89,7 +88,7 @@ x04 AND y04 -> z04
 x05 AND y05 -> z00
 INPUT;
 
-function process_input(string $i) : array {
+function process_input(string $i): array {
 	$cables = [];
 	$gates = [
 		0 => new SplQueue([]),
@@ -100,13 +99,13 @@ function process_input(string $i) : array {
 	[$c_raw, $g_raw] = explode("\n\n", $i);
 	foreach (explode("\n", $c_raw) as $c) {
 		[$id, $v] = explode(': ', $c);
-		$cables[$id] = boolval($v);
+		$cables[$id] = (bool)$v;
 	}
 	foreach (explode("\n", $g_raw) as $g) {
 		[$c1, $op, $c2, , $co] = explode(' ', $g);
-		if (isset($cables[$c1]) && isset($cables[$c2])) {
+		if (isset($cables[$c1], $cables[$c2])) {
 			$gates[2]->push([$c1, $op, $c2, $co]);
-		} else if (isset($cables[$c1]) || isset($cables[$c2])) {
+		} elseif (isset($cables[$c1]) || isset($cables[$c2])) {
 			$gates[1]->push([$c1, $op, $c2, $co]);
 		} else {
 			$gates[0]->push([$c1, $op, $c2, $co]);
@@ -115,11 +114,11 @@ function process_input(string $i) : array {
 	return [$cables, $gates];
 }
 
-function part1 (string $input) {
+function part1(string $input) {
 	/** @var array<SplQueue> $gates */
 	[$cables, $gates] = process_input($input);
 
-	foreach ([2,1,0] as $gqid) {
+	foreach ([2, 1, 0] as $gqid) {
 		$q = $gates[$gqid];
 		while (!$q->isEmpty()) {
 			[$c1, $op, $c2, $co] = $q->dequeue();
@@ -137,7 +136,7 @@ function part1 (string $input) {
 		}
 	}
 
-	$zs = array_reduce(array_keys($cables), function($carry, $item) use ($cables) {
+	$zs = array_reduce(array_keys($cables), function ($carry, $item) use ($cables) {
 		if (str_starts_with($item, 'z')) {
 			$carry[$item] = $cables[$item] ? '1' : '0';
 		}
@@ -151,27 +150,27 @@ function part1 (string $input) {
 function sort_val(string $op, string $c) {
 	return match(true) {
 		str_starts_with($c, 'x') || str_starts_with($c, 'y') =>
-			'aa'.$op.substr($c, 1).substr($c, 0, 1), // x000 => aaa000x
-		str_starts_with($c, 'z') => $c.$op,
-		default => $op.$c
+			'aa' . $op . substr($c, 1) . substr($c, 0, 1), // x000 => aaa000x
+		str_starts_with($c, 'z') => $c . $op,
+		default => $op . $c
 	};
 }
 
-function part2 (string $input, string $diakey) {
+function part2(string $input, string $diakey) {
 	[$c_raw , $g_raw] = explode("\n\n", $input);
-	$xzcount = (int) count(explode("\n", $c_raw)) / 2;
+	$xzcount = (int)count(explode("\n", $c_raw)) / 2;
 
 	$diagram = [
 		'flowchart TD'
 	];
 
-	for ($i=0; $i < $xzcount; $i++) {
+	for ($i = 0; $i < $xzcount; $i++) {
 		$k = sprintf('%s%02d', 'x', $i);
 		$diagram [] = "\t{$k}@{ shape: framed-circle, label: '{$k}'}";
 		$k = sprintf('%s%02d', 'y', $i);
 		$diagram [] = "\t{$k}@{ shape: framed-circle, label: '{$k}'}";
 	}
-	for ($i=0; $i < $xzcount+1; $i++) {
+	for ($i = 0; $i < $xzcount + 1; $i++) {
 		$k = sprintf('%s%02d', 'z', $i);
 		$diagram [] = "\t{$k}@{ shape: framed-circle, label: '{$k}'}";
 	}
@@ -196,17 +195,17 @@ function part2 (string $input, string $diakey) {
 		$opcon = "$c1$op$c2@{ label: '$op'}";
 
 		if (str_starts_with($co, 'z')) {
-			$conn []= ["\t$c1 ---> |$c1| $opcon", sort_val($op, $c1)];
-			$conn []= ["\t$c2 ---> |$c2| $opcon", sort_val($op, $c2)];
-			$conn []= ["\t$opcon ---> |$co| $co", sort_val($op, $co)];
+			$conn [] = ["\t$c1 ---> |$c1| $opcon", sort_val($op, $c1)];
+			$conn [] = ["\t$c2 ---> |$c2| $opcon", sort_val($op, $c2)];
+			$conn [] = ["\t$opcon ---> |$co| $co", sort_val($op, $co)];
 		} else {
-			$conn []= ["\t$c1 ---> |$c1| $co@{ label: '$op'}", sort_val($op, $c1)];
-			$conn []= ["\t$c2 ---> |$c2| $co@{ label: '$op'}", sort_val($op, $c2)];
+			$conn [] = ["\t$c1 ---> |$c1| $co@{ label: '$op'}", sort_val($op, $c1)];
+			$conn [] = ["\t$c2 ---> |$c2| $co@{ label: '$op'}", sort_val($op, $c2)];
 		}
 	}
 
 	usort($conn, fn ($a, $b) => $a[1] <=> $b[1]);
-	$diagram = array_merge($diagram, array_map(fn($c) => $c[0], $conn));
+	$diagram = array_merge($diagram, array_map(fn ($c) => $c[0], $conn));
 
 	// $i = count($conn);
 	F::write(__DIR__ . "/outputs/24-{$diakey}.txt", join("\n", $diagram));
@@ -222,22 +221,22 @@ $s = microtime(true);
 $p = microtime(true);
 $r = part1($input_demo);
 println('1) Result of demo 1: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 4);
 
 $p = microtime(true);
 $r = part1($input_demo2);
 println('1) Result of demo 2: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 2024);
 
 $p = microtime(true);
 println('1) Result of real input: ' . part1($input));
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 
 // 2
 $p = microtime(true);
 println('2) Result of real input: ' . part2($input, 'real'));
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 
-printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
+printf("TOTAL: %.3fms\n", (microtime(true) - $s) * 1000);

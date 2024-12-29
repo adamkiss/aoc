@@ -1,6 +1,5 @@
 <?php
 
-use Kirby\Filesystem\F;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -18,7 +17,7 @@ $input_demo2 = <<<INPUT
 2024
 INPUT;
 
-function step(int $n) : int {
+function step(int $n): int {
 	$_ = $n * 64;
 	$n ^= $_;
 	$n = $n % 16777216;
@@ -35,11 +34,11 @@ function process_input(string $i): array {
 	return array_map('intval', explode("\n", $i));
 }
 
-function part1 (string $input) {
+function part1(string $input) {
 	$nums = process_input($input);
 	$sum = 0;
 	foreach ($nums as $n) {
-		for ($i=0; $i < 2000; $i++) {
+		for ($i = 0; $i < 2000; $i++) {
 			$n = step($n);
 		}
 		$sum += $n;
@@ -56,20 +55,20 @@ function part2_debug() {
 		$d = [[$price, null]];
 		$n = $on;
 
-		for ($i=1; $i <= 10; $i++) {
+		for ($i = 1; $i <= 10; $i++) {
 			$n = step($n);
 			$nextPrice = $n % 10;
-			$d []= [$nextPrice, $nextPrice - $price];
+			$d [] = [$nextPrice, $nextPrice - $price];
 			$price = $nextPrice;
 
 			if ($i < 4) {
 				continue;
 			}
 			$seq = join(',', [
-				$d[$i-3][1],
-				$d[$i-2][1],
-				$d[$i-1][1],
-				$d[$i-0][1],
+				$d[$i - 3][1],
+				$d[$i - 2][1],
+				$d[$i - 1][1],
+				$d[$i - 0][1],
 			]);
 			println($i, $seq, $price, count($d));
 			if (isset($seen[$seq])) {
@@ -85,7 +84,7 @@ function part2_debug() {
 	rd($d);
 }
 
-function part2 (string $input) {
+function part2(string $input) {
 	$nums = process_input($input);
 	$max = [];
 	foreach ($nums as $numord => $on) {
@@ -94,20 +93,20 @@ function part2 (string $input) {
 		$price = $n % 10;
 		$d = [[$price, null]];
 
-		for ($i=1; $i <= 2000; $i++) {
+		for ($i = 1; $i <= 2000; $i++) {
 			$n = step($n);
 			$nextPrice = $n % 10;
-			$d []= [$nextPrice, $nextPrice - $price];
+			$d [] = [$nextPrice, $nextPrice - $price];
 			$price = $nextPrice;
 
 			if ($i < 3) {
 				continue;
 			}
 			$seq = join(',', [
-				$d[$i-3][1],
-				$d[$i-2][1],
-				$d[$i-1][1],
-				$d[$i-0][1],
+				$d[$i - 3][1],
+				$d[$i - 2][1],
+				$d[$i - 1][1],
+				$d[$i - 0][1],
 			]);
 			if (isset($seen[$seq])) {
 				continue;
@@ -138,7 +137,7 @@ assert(step(12683156) === 11100544);
 assert(step(11100544) === 12249484);
 assert(step(12249484) === 7753432);
 assert(step(7753432) === 5908254);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 
 
 // 1
@@ -150,26 +149,26 @@ printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 //
 $p = microtime(true);
 println('1) Result of real input: ' . part1($input));
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 
 // 2
 $p = microtime(true);
 $r = part2($input_demo2);
 println('2) Result of demo (2): ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 23);
 
 $p = microtime(true);
 $r = part2($input_demo);
 println('2) Result of demo (1): ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 24);
 
 $p = microtime(true);
 $r = part2($input);
 println('2) Result of real input: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r !== 2274); // first guess - missed "use sequence only once p monkey"
 assert($r !== 2240); // second guess // too low?
 
-printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
+printf("TOTAL: %.3fms\n", (microtime(true) - $s) * 1000);

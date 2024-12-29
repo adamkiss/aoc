@@ -1,6 +1,5 @@
 <?php
 
-use Ds\PriorityQueue;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -50,7 +49,7 @@ function process_input(string $input): array {
 	return $conn;
 }
 
-function part1 (string $input) {
+function part1(string $input) {
 	$net = process_input($input);
 	$tt = [];
 	foreach ($net as $pc1 => $conn) {
@@ -73,7 +72,7 @@ function part1 (string $input) {
 	return count($tt);
 }
 
-function part2 (string $input) {
+function part2(string $input) {
 	$net = process_input($input);
 
 	$q = new SplPriorityQueue();
@@ -125,22 +124,22 @@ $s = microtime(true);
 $p = microtime(true);
 $r = part1($input_demo);
 println('1) Result of demo: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 7);
 
 $p = microtime(true);
 println('1) Result of real input: ' . part1($input));
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 
 // 2
 $p = microtime(true);
 $r = part2($input_demo);
 println('2) Result of demo: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 'co,de,ka,ta');
 
 $p = microtime(true);
 println('2) Result of real input: ' . part2($input));
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 
-printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
+printf("TOTAL: %.3fms\n", (microtime(true) - $s) * 1000);
