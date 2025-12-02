@@ -39,6 +39,34 @@ function part1(string $input) {
 	return $zero;
 }
 
+function part2(string $input) {
+	$pos = 50;
+	$zero = 0;
+	foreach (Str::split($input, "\n") as $l) {
+		$lpos = $pos;
+		$dir = $l[0] === 'L' ? -1 : 1;
+		$amt = (int)ltrim($l, 'LR');
+		$pos += ($dir * $amt);
+		$hadloopedr = false;
+		while ($pos < 0) {
+			$zero++;
+			$pos += 100;
+		}
+		while ($pos > 99) {
+			$hadloopedr = true;
+			$zero++;
+			$pos -= 100;
+		}
+		if ($pos === 0 && ! $hadloopedr) {
+			$zero++;
+		}
+		if ($lpos === 0 && $dir === -1) {
+			$zero--;
+		}
+	}
+	return $zero;
+}
+
 $s = microtime(true);
 
 // 1
@@ -53,14 +81,14 @@ println('1) Result of real input: ' . part1($input));
 printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 // 2
-// $p = microtime(true);
-// $r = part2($input_demo);
-// println('2) Result of demo: ' . $r);
-// printf("» %.3fms\n", (microtime(true)-$p) * 1000);
-// assert($r === 1);
-//
-// $p = microtime(true);
-// println('2) Result of real input: ' . part2($input));
-// printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+$p = microtime(true);
+$r = part2($input_demo);
+println('2) Result of demo: ' . $r);
+printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+assert($r === 6);
+
+$p = microtime(true);
+println('2) Result of real input: ' . part2($input));
+printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
