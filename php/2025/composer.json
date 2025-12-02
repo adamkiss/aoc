@@ -1,0 +1,30 @@
+{
+	"name": "adamkiss/advent-of-code-2025",
+	"description": "Advent of Code 2025",
+	"type": "project",
+	"homepage": "https://adamkiss.com",
+	"authors": [
+		{
+			"name": "Adam Kiss"
+		}
+	],
+	"require": {
+		"php": ">=8.0.0",
+		"adamkiss/toolkit": "^0.1.6"
+	},
+	"autoload": {
+		"files": [
+			"_utils.php",
+			"classes/Vec2.php"
+		]
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"allow-plugins": {
+			"getkirby/composer-installer": true
+		}
+	},
+	"extra": {
+		"kirby-cms-path": false
+	}
+}
