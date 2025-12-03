@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	start := time.Now().Local().UnixMicro()
+	start := time.Now()
 	args := os.Args[1:]
 	days := map[string]func(){
 		"01": days.Day01,
@@ -27,5 +27,5 @@ func main() {
 	}
 
 	dayfunc()
-	fmt.Printf("Total: %.3fms", float64(time.Now().Local().UnixMicro()-start)/1000)
+	fmt.Printf("Total: %s", time.Since(start))
 }

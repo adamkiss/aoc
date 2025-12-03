@@ -90,7 +90,7 @@ func part2(i string) int {
 }
 
 func Day01() {
-	start := time.Now().Local().UnixMicro()
+	start := time.Now()
 
 	demo1expected := 3
 	var r1 int
@@ -101,12 +101,12 @@ func Day01() {
 	r1 = part1(input)
 	fmt.Printf("Part 1: %d\n", r1)
 
-	p01time := float64(time.Now().Local().UnixMicro()-start) / 1000
+	p01time := time.Since(start)
 
 	//
 	// Part 02
 	//
-	start = time.Now().Local().UnixMicro()
+	start = time.Now()
 
 	var r2 int
 	demo2expected := 6
@@ -117,13 +117,13 @@ func Day01() {
 	r2 = part2(input)
 	fmt.Printf("Part 2: %d\n", r2)
 
-	p02time := float64(time.Now().Local().UnixMicro()-start) / 1000
+	p02time := time.Since(start)
 
 	//
 	// Output
 	//
 	fmt.Println()
 	fmt.Println("Runtimes ↴")
-	fmt.Printf("Day %s Part 1: %.3fms\n", daystr, p01time)
-	fmt.Printf("Day %s Part 2: %.3fms\n", daystr, p02time)
+	fmt.Printf("Day %s Part 1: %s\n", daystr, p01time)
+	fmt.Printf("Day %s Part 2: %s\n", daystr, p02time)
 }
