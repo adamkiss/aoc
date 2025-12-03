@@ -1,36 +1,35 @@
-package days
+package main
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/adamkiss/aoc/2025/utils"
+	"github.com/adamkiss/aoc/go/utils"
 )
 
-var daystr string = "XY"
-var input string = utils.ReadInput(daystr)
+var input string = utils.ReadInput("XY")
 var inputdemo string = `
 ABC
 `
 
-func part1(i string) int {
+func Part1(i string) int {
 	return 1
 }
 
-func part2(i string) int {
+func Part2(i string) int {
 	return 2
 }
 
-func DayXY() {
+func main() {
 	start := time.Now()
 
 	var r1 int
 	demo1expected := 1
-	r1 = part1(inputdemo)
+	r1 = Part1(inputdemo)
 	if r1 != demo1expected {
 		panic(fmt.Sprintf("Part 1 demo failed: %d, expected %d", r1, demo1expected))
 	}
-	r1 = part1(input)
+	r1 = Part1(input)
 	fmt.Printf("Part 1: %d\n", r1)
 
 	p01time := time.Since(start)
@@ -38,24 +37,25 @@ func DayXY() {
 	//
 	// Part 02
 	//
-	start = time.Now()
+	start2 := time.Now()
 
 	// var r2 int
 	// demo2expected := 2
-	// r2 = part2(inputdemo)
+	// r2 = Part2(inputdemo)
 	// if r2 != demo2expected {
 	// 	panic(fmt.Sprintf("Part 2 demo failed: %d, expected %d", r2, demo2expected))
 	// }
-	// r2 = part2(input)
+	// r2 = Part2(input)
 	// fmt.Printf("Part 2: %d\n", r2)
 
-	p02time := time.Since(start)
+	p02time := time.Since(start2)
 
 	//
 	// Output
 	//
 	fmt.Println()
 	fmt.Println("Runtimes ↴")
-	fmt.Printf("Day %s Part 1: %s\n", daystr, p01time)
-	fmt.Printf("Day %s Part 2: %s\n", daystr, p02time)
+	fmt.Printf("Day XY Part 1: %s\n", p01time)
+	fmt.Printf("Day XY Part 2: %s\n", p02time)
+	fmt.Printf("Day XY Total : %s\n", time.Since(start))
 }

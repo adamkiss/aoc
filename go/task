@@ -1,0 +1,43 @@
+#!/usr/bin/env zsh
+# shellcheck shell=bash
+
+tpl () { #: prepare stuff and watch
+    YEAR="${2:-2025}"
+    DAY="$1"
+	mkdir "$YEAR/$DAY"
+    cp _template.go "$YEAR/$DAY/day$DAY.go"
+    sed -i '' "s/XY/$1/g" "$YEAR/$DAY/day$DAY.go"
+    code "$YEAR/$DAY/day$DAY.go"
+}
+
+run () { #: run a day's code
+    YEAR="${2:-2025}"
+    DAY="${1:-02}"
+    go run "$YEAR/$DAY/day$DAY.go"
+}
+
+#
+# BOILERPLATE
+#
+r='./task'
+NAME='aoc in go 2025'
+
+h () { #: show help & commands
+	echo "$NAME script runner"
+	echo "Commands:"
+	sed -nr 's/^(.*) \(\).* #: (.*)$/  \1\t\2/p' $r | expand -20
+}
+
+if [[ $# -gt 0 ]]; then
+	command="$1"
+	shift 1
+	if type "$command" 2>/dev/null | grep -q 'function'; then
+		$command "$@"
+	else
+		about
+		echo "No command '$command'."
+	fi;
+else
+	# about
+	dev
+fi
