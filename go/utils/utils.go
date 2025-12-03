@@ -25,8 +25,9 @@ func ReadInput(file string) string {
 	return string(content)
 }
 
-func TrimLines(s string) []string {
-	lines := strings.Split(s, "\n")
+func SplitTrim(s string, chr string) []string {
+	s = strings.TrimSpace(s)
+	lines := strings.Split(s, chr)
 	var trimmed []string
 	for _, line := range lines {
 		t := strings.TrimSpace(line)

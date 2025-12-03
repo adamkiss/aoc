@@ -25,7 +25,7 @@ L82
 func Part1(i string) int {
 	pos, zeros := 50, 0
 
-	for _, t := range utils.TrimLines(i) {
+	for _, t := range utils.SplitTrim(i, "\n") {
 		dir := 1
 		if t[0] == 'L' {
 			dir = -1
@@ -54,7 +54,7 @@ func Part2(i string) int {
 	lpos, pos, zeros := 50, 50, 0
 	hadloopedr := false
 
-	for _, t := range utils.TrimLines(i) {
+	for _, t := range utils.SplitTrim(i, "\n") {
 		lpos = pos
 		hadloopedr = false
 
