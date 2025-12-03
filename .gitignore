@@ -3,5 +3,7 @@ inputs
 php/**/vendor
 node_modules
 
+go/**/__debug*
+
 Icon
 .DS_Store
