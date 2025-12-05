@@ -94,19 +94,18 @@ func Part2(ranges *[]Range) int {
 			if cmpr.s == -1 {
 				continue
 			}
-			if (*ranges)[i].e < cmpr.s {
+			if r.e < cmpr.s {
 				break
 			}
+			if r.e >= cmpr.e {
+				(*ranges)[j] = Range{-1, -1}
+				continue
+			}
+			r.e = cmpr.e
 			(*ranges)[i].e = cmpr.e
+
 			(*ranges)[j] = Range{-1, -1}
 		}
-	}
-
-	for _, r := range *ranges {
-		if r.s == -1 {
-			continue
-		}
-		fmt.Println(r, r.e-r.s+1)
 	}
 
 	// calculate fresh
