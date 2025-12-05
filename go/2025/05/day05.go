@@ -59,24 +59,7 @@ func parseinput(i string) ([]Range, []int) {
 	return ranges, ingredients
 }
 
-func Part1(ranges *[]Range, ingredients *[]int) int {
-	fc := 0
-	for _, i := range *ingredients {
-		for _, r := range *ranges {
-			if i <= r.e && i >= r.s {
-				fc++
-				break
-			}
-		}
-	}
-	return fc
-}
-
-// Wrong p2 answers:
-// 315029540725894
-// 314662503062125
-// 334877939080182
-func Part2(ranges *[]Range) int {
+func SortAndMergeRanges(ranges *[]Range) {
 	slices.SortFunc(*ranges, func(a Range, b Range) int {
 		scmp := a.s - b.s
 		if scmp != 0 {
@@ -107,8 +90,29 @@ func Part2(ranges *[]Range) int {
 			(*ranges)[j] = Range{-1, -1}
 		}
 	}
+}
 
-	// calculate fresh
+func Part1(ranges *[]Range, ingredients *[]int) int {
+	fc := 0
+	li := 0
+	for _, i := range *ingredients {
+		for _, r := range *ranges {
+			li++
+			if i <= r.e && i >= r.s {
+				fc++
+				break
+			}
+		}
+	}
+	fmt.Println(li)
+	return fc
+}
+
+// Wrong p2 answers:
+// 315029540725894
+// 314662503062125
+// 334877939080182
+func Part2(ranges *[]Range) int {
 	c := 0
 	for _, r := range *ranges {
 		if r.s == -1 {
@@ -124,6 +128,8 @@ func main() {
 
 	rd, id := parseinput(inputdemo)
 	ri, ii := parseinput(input)
+	SortAndMergeRanges(&rd)
+	SortAndMergeRanges(&ri)
 
 	parsetime := time.Since(start)
 
