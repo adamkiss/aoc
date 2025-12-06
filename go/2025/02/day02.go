@@ -29,10 +29,10 @@ func digits(i int) int {
 }
 
 func Part1(i string) int {
-	ranges := utils.SplitTrim(i, ",")
+	ranges := utils.TrimSplit(i, ",")
 	var invalid []int
 	for _, r := range ranges {
-		bounds := utils.SplitTrim(r, "-")
+		bounds := utils.TrimSplit(r, "-")
 		if len(bounds) != 2 {
 			panic("invalid range")
 		}
@@ -65,11 +65,11 @@ func Part1(i string) int {
 }
 
 func Part2(i string) int {
-	ranges := utils.SplitTrim(i, ",")
+	ranges := utils.TrimSplit(i, ",")
 	tests := [...]int{2, 3, 5, 7}
 	var invalid []int
 	for _, r := range ranges {
-		bounds := utils.SplitTrim(r, "-")
+		bounds := utils.TrimSplit(r, "-")
 		if len(bounds) != 2 {
 			panic("invalid range")
 		}

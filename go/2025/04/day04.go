@@ -23,7 +23,7 @@ var inputdemo string = `
 
 func parseinput(i string) [][]rune {
 	var grid [][]rune
-	lines := utils.SplitTrim(i, "\n")
+	lines := utils.TrimSplit(i, "\n")
 	for _, l := range lines {
 		grid = append(grid, []rune(l))
 	}

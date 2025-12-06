@@ -48,7 +48,7 @@ func bankjoltage(bank []int, digits int) int {
 }
 
 func Part1(i string) int {
-	banks := utils.SplitTrim(i, "\n")
+	banks := utils.TrimSplit(i, "\n")
 	joltage := 0
 	for _, bank := range banks {
 		bankints := make([]int, len(bank))
@@ -61,7 +61,7 @@ func Part1(i string) int {
 }
 
 func Part2(i string) int {
-	banks := utils.SplitTrim(i, "\n")
+	banks := utils.TrimSplit(i, "\n")
 	joltage := 0
 	for _, bank := range banks {
 		bankints := make([]int, len(bank))

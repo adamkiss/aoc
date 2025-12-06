@@ -30,12 +30,12 @@ type Range struct {
 }
 
 func parseinput(i string) ([]Range, []int) {
-	tmp := utils.SplitTrim(i, "\n\n")
+	tmp := utils.TrimSplit(i, "\n\n")
 	rangesstr, ingredientsstr := tmp[0], tmp[1]
 
 	ranges := []Range{}
-	for _, r := range utils.SplitTrim(rangesstr, "\n") {
-		rstr := utils.SplitTrim(r, "-")
+	for _, r := range utils.TrimSplit(rangesstr, "\n") {
+		rstr := utils.TrimSplit(r, "-")
 		rs, err := strconv.Atoi(rstr[0])
 		if err != nil {
 			panic(err)
@@ -48,7 +48,7 @@ func parseinput(i string) ([]Range, []int) {
 	}
 
 	ingredients := []int{}
-	for _, istr := range utils.SplitTrim(ingredientsstr, "\n") {
+	for _, istr := range utils.TrimSplit(ingredientsstr, "\n") {
 		i, err := strconv.Atoi(istr)
 		if err != nil {
 			panic(err)
