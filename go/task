@@ -12,7 +12,7 @@ tpl () { #: prepare stuff and watch
 
 run () { #: run a day's code
     YEAR="${2:-2025}"
-    DAY="${1:-05}"
+    DAY="${1:-01}"
     go run "$YEAR/$DAY/day$DAY.go"
 }
 
