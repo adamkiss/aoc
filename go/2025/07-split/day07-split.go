@@ -1,0 +1,182 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/adamkiss/aoc/go/utils"
+)
+
+var input string = utils.ReadInput("07")
+var inputdemo string = `
+.......S.......
+...............
+.......^.......
+...............
+......^.^......
+...............
+.....^.^.^.....
+...............
+....^.^...^....
+...............
+...^.^...^.^...
+...............
+..^...^.....^..
+...............
+.^.^.^.^.^...^.
+...............
+`
+
+type Pos struct {
+	row int
+	col int
+}
+
+type GridSplitString struct {
+	s []string
+	w int
+	h int
+}
+
+func CreateGridSplitString(s string) GridSplitString {
+	lines := strings.Split(strings.Trim(s, "\n"), "\n")
+	h := len(lines)
+	w := len(lines[0])
+	return GridSplitString{lines, w, h}
+}
+
+func (g GridSplitString) GetPos(p Pos) string {
+	if g.OutOfBounds(p) {
+		panic(fmt.Sprintf("GetRC: %d,%d out of bounds! \n %s", p.row, p.col, g.s))
+	}
+	return g.s[p.row][p.col : p.col+1]
+}
+
+func (g GridSplitString) OutOfBounds(p Pos) bool {
+	return p.row < 0 || p.col < 0 || p.row >= g.w || p.col >= g.h
+}
+
+func Part1(i string) int {
+	grid := CreateGridSplitString(i)
+	sr, sc := 1, strings.Index(grid.s[0], "S")
+	beams := map[Pos]bool{{sr, sc}: true}
+	splits := 0
+
+	for {
+		newbeams := map[Pos]bool{}
+		for beam := range beams {
+			n := Pos{beam.row + 1, beam.col}
+			if grid.OutOfBounds(n) {
+				continue
+			}
+			char := grid.GetPos(n)
+			if char == "." {
+				newbeams[n] = true
+				continue
+			}
+
+			splits++
+			nl := Pos{n.row, n.col - 1}
+			n.col++
+			if !grid.OutOfBounds(nl) {
+				newbeams[nl] = true
+			}
+			if !grid.OutOfBounds(n) {
+				newbeams[n] = true
+			}
+		}
+
+		if len(newbeams) == 0 {
+			break
+		}
+
+		beams = newbeams
+	}
+
+	return splits
+}
+
+func Part2(i string) int {
+	grid := CreateGridSplitString(i)
+	sr, sc := 1, strings.Index(grid.s[0], "S")
+	beams := map[Pos]int{{sr, sc}: 1}
+	timelines := 0
+
+	for {
+		newbeams := map[Pos]int{}
+		for beam, paths := range beams {
+			if beam.row == grid.h-2 {
+				timelines += paths
+				continue
+			}
+
+			n := Pos{beam.row + 1, beam.col}
+			if grid.OutOfBounds(n) {
+				continue
+			}
+			char := grid.GetPos(n)
+			if char == "." {
+				newbeams[n] += paths
+				continue
+			}
+
+			nl := Pos{n.row, n.col - 1}
+			n.col++
+			if !grid.OutOfBounds(nl) {
+				newbeams[nl] += paths
+			}
+			if !grid.OutOfBounds(n) {
+				newbeams[n] += paths
+			}
+		}
+
+		if len(newbeams) == 0 {
+			break
+		}
+
+		beams = newbeams
+	}
+
+	return timelines
+}
+
+func main() {
+	start := time.Now()
+
+	var r1 int
+	demo1expected := 21
+	r1 = Part1(inputdemo)
+	if r1 != demo1expected {
+		panic(fmt.Sprintf("Part 1 demo failed: %d, expected %d", r1, demo1expected))
+	}
+	r1 = Part1(input)
+	fmt.Printf("Part 1: %d\n", r1)
+
+	p01time := time.Since(start)
+
+	//
+	// Part 02
+	//
+	start2 := time.Now()
+
+	var r2 int
+	demo2expected := 40
+	r2 = Part2(inputdemo)
+	if r2 != demo2expected {
+		panic(fmt.Sprintf("Part 2 demo failed: %d, expected %d", r2, demo2expected))
+	}
+	r2 = Part2(input)
+	fmt.Printf("Part 2: %d\n", r2)
+
+	p02time := time.Since(start2)
+
+	//
+	// Output
+	//
+	fmt.Println()
+	fmt.Println("Runtimes ↴")
+	fmt.Printf("Day 07 Part 1: %s\n", p01time)
+	fmt.Printf("Day 07 Part 2: %s\n", p02time)
+	fmt.Printf("Day 07 Total : %s\n", time.Since(start))
+}
