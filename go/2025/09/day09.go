@@ -47,7 +47,6 @@ func (from Vec2) AreaTo(to Vec2) int {
 
 type Edge struct {
 	from, to   Vec2
-	vert       bool
 	t, l, b, r int
 }
 
@@ -65,12 +64,11 @@ func CreateArea(f, t Vec2) Area {
 }
 
 func CreateEdge(from, to Vec2) Edge {
-	vert := from.col == to.col
 	t := min(from.row, to.row)
 	b := max(from.row, to.row)
 	l := min(from.col, to.col)
 	r := max(from.col, to.col)
-	return Edge{from, to, vert, t, l, b, r}
+	return Edge{from, to, t, l, b, r}
 }
 
 func (e Edge) DoesntCross(a Area) bool {
