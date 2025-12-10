@@ -18,24 +18,58 @@ class Machine {
 	public array $joltages = [];
 
 	public function __construct(string $s) {
-		$parts = Str::split(trim($s), " ");
-		$target = trim(array_shift($parts), '[]');
-		$joltages = trim(array_pop($parts), '{}');
+		$parts = Str::split(trim($s), ' ');
+		$tarstr = trim(array_shift($parts), '[]');
+		$joltstr = trim(array_pop($parts), '{}');
 
-		$target = Str::replace($target, ['.', '#'], ['0', '1']);
-		$this->target = bindec($target);
-		$maxbits = strlen($target);
-
-		$this->joltages = A::map(Str::split($joltages), intval(...));
+		$target = 0;
+		foreach (str_split($tarstr) as $i => $c) {
+			if ($c !== '#') {
+				continue;
+			}
+			$target += 1 << $i;
+		}
+		$this->target = $target;
+		$this->joltages = A::map(Str::split($joltstr), intval(...));
 
 		foreach ($parts as $bstr) {
 			$bits = Str::split(trim($bstr, '()'));
 			$button = 0;
 			foreach ($bits as $bit) {
-				$button |= 1 << (($maxbits-1) - intval($bit));
+				$button += 1 << (int)$bit;
 			}
 			$this->buttons[] = $button;
 		}
+	}
+
+	public function turn_on_steps(): int {
+		/** @var array<int, bool> */
+		$stepresults = [0 => true];
+		$iter = 0;
+
+		while ($iter < 10_000) {
+			$iter++;
+
+			/** @var array<int, bool> */
+			$nextresults = [];
+
+			foreach ($stepresults as $stepres => $_) {
+				foreach ($this->buttons as $i => $b) {
+					$nextval = $stepres ^ $b;
+
+					if ($nextval === $this->target) {
+						return $iter;
+					}
+
+					$nextresults[$nextval] = true;
+				}
+			}
+
+			$stepresults = $nextresults;
+		}
+
+		echo "Didn't reach total for a machine in 10 000 steps, exiting.\n";
+		die(1);
 	}
 }
 
@@ -43,41 +77,12 @@ class Machine {
  * @param array<int, Machine> $machines
  * @return void
  */
-function part1 (array $machines) {
-	$total = 0;
-
-	foreach ($machines as $m) {
-		$q = new SplPriorityQueue();
-		$q->setExtractFlags($q::EXTR_BOTH);
-		foreach ($m->buttons as $i => $b) {
-			$q->insert([0 ^ $b, [$i]], 100_000);
-		}
-
-		while (!$q->isEmpty()) {
-			['data' => [$v, $steps], 'priority' => $p] = $q->extract();
-			$p--;
-			foreach ($m->buttons as $i => $b) {
-				$nv = $v ^ $b;
-				$nsteps = A::merge($steps, [$i]);
-				// printf("%d in steps %s\n", $nv, join(",", $nsteps));
-				if ($nv === $m->target) {
-					$total += count($nsteps);
-					break 2;
-
-				}
-				$q->insert([$nv, $nsteps], $p);
-				// if ($q->count() === 1_000_000) {
-				// 	ray($q->extract());
-				// 	die('Queue size of 1_000_000 reached, exiting');
-				// }
-			}
-		}
-	}
-
+function part1(array $machines) {
+	$total = array_reduce($machines, fn ($c, $m) => $c + $m->turn_on_steps(), 0);
 	return $total;
 }
 
-function part2 (string $input) {
+function part2(string $input) {
 	return true;
 }
 
@@ -86,18 +91,18 @@ $s = microtime(true);
 $machines_demo = A::map(Str::split($input_demo, "\n"), fn ($mstr) => new Machine($mstr));
 $machines_input = A::map(Str::split($input, "\n"), fn ($mstr) => new Machine($mstr));
 
-printf("0) Parsing » %.3fms\n", (microtime(true)-$s) * 1000);
+printf("0) Parsing » %.3fms\n", (microtime(true) - $s) * 1000);
 
 // 1
 $p = microtime(true);
 $r = part1($machines_demo);
 println('1) Result of demo: ' . $r);
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 assert($r === 7);
 
 $p = microtime(true);
 println('1) Result of real input: ' . part1($machines_input));
-printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 
 // 2
 // $p = microtime(true);
@@ -110,4 +115,4 @@ printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 // println('2) Result of real input: ' . part2($input));
 // printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
-printf("TOTAL: %.3fms\n", (microtime(true)-$s) * 1000);
+printf("TOTAL: %.3fms\n", (microtime(true) - $s) * 1000);
