@@ -1,9 +1,7 @@
 package main
 
 import (
-	"container/heap"
 	"fmt"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -18,101 +16,78 @@ var inputdemo string = `
 [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}
 `
 
-var machine_re = regexp.MustCompile(`^\[([.#]*)\]\s*(\(.*\))\s*{([\d,]*)\}$`)
-var buttons_re = regexp.MustCompile(`\(([\d,]*)\)`)
-
-type QueueItem struct {
-	//
-	value int64
-	steps []int
-	//
+type Button struct {
+	raw   string
 	index int
-}
-type PriorityQueue []*QueueItem
-
-func (pq PriorityQueue) Len() int {
-	return len(pq)
-}
-
-func (pq PriorityQueue) Less(l, r int) bool {
-	return len(pq[l].steps) < len(pq[r].steps)
-}
-
-func (pq PriorityQueue) Swap(l, r int) {
-	pq[l], pq[r] = pq[r], pq[l]
-	pq[l].index = l
-	pq[r].index = r
-}
-
-func (pq *PriorityQueue) Push(x any) {
-	n := len(*pq)
-	i := x.(*QueueItem)
-	i.index = n
-	*pq = append(*pq, i)
-}
-
-func (pq *PriorityQueue) Pop() any {
-	old := *pq
-	n := len(old)
-	i := old[n-1]
-	old[n-1] = nil
-	i.index = -1
-	*pq = old[:n-1]
-	return i
+	val   int
 }
 
 type Machine struct {
-	target   int64
-	buttons  []int64
+	target   int
+	buttons  []Button
 	joltages []int
 }
 
-func findfastestsolution(m Machine) []int {
-	q := make(PriorityQueue, 0)
-	for i, b := range m.buttons {
-		q.Push(&QueueItem{0 ^ b, []int{i}, i})
-	}
-	heap.Init(&q)
+type PressResult struct {
+	result  int
+	presses []*Button
+}
 
-	for q.Len() > 0 {
-		i := heap.Pop(&q).(*QueueItem)
-		for bi, b := range m.buttons {
-			nv := i.value ^ b
-			st := append(i.steps, bi)
-			if nv == int64(m.target) {
-				return st
-			} else {
-				heap.Push(&q, &QueueItem{nv, st, q.Len()})
+type Result struct {
+	machine *Machine
+	result  PressResult
+}
+
+func findfastestsolution(m Machine) PressResult {
+	q := []PressResult{{0, []*Button{}}}
+	// for _, b := range m.buttons {
+	// 	q = append(q, PressResult{0 ^ b.val, []*Button{&b}})
+	// }
+
+	iterations := 0
+	for {
+		iterations++
+
+		nq := []PressResult{}
+		for _, r := range q {
+			for _, b := range m.buttons {
+				npr := PressResult{r.result ^ b.val, append(r.presses, &b)}
+				if npr.result == m.target {
+					return npr
+				}
+				nq = append(nq, npr)
 			}
 		}
-	}
+		q = nq
 
-	return []int{}
+		if iterations == 1_000_000 {
+			panic("Million iterations reached, probably dead end.")
+		}
+	}
 }
 
 func ParseMachine(s string) Machine {
-	matches := machine_re.FindStringSubmatch(s)
+	p := strings.Split(s, " ")
 
-	tstr := strings.Replace(matches[1], ".", "0", -1)
-	tstr = strings.Replace(tstr, "#", "1", -1)
-	t, _ := strconv.ParseInt(tstr, 2, 64)
-
-	buttons := []int64{}
-	btns := buttons_re.FindAllStringSubmatch(matches[2], -1)
-	for _, btnm := range btns {
-		b := make([]rune, len(tstr))
-		for i := range len(b) {
-			b[i] = '0'
+	target := 0
+	for i, c := range strings.Trim(p[0], "[]") {
+		if c == '#' {
+			target += 1 << i
 		}
-		for _, whichbit := range strings.Split(btnm[1], ",") {
-			bit, _ := strconv.Atoi(whichbit)
-			b[bit] = '1'
-		}
-		btn, _ := strconv.ParseInt(string(b), 2, 64)
-		buttons = append(buttons, btn)
 	}
 
-	joltagesraw := strings.Split(matches[3], ",")
+	buttons := []Button{}
+	for i, btnstr := range p[1 : len(p)-1] {
+		bits := strings.Split(strings.Trim(btnstr, "()"), ",")
+		btnval := 0
+		for _, bitstr := range bits {
+			bit, _ := strconv.Atoi(bitstr)
+			btnval += 1 << bit
+		}
+		buttons = append(buttons, Button{btnstr, i, btnval})
+	}
+
+	joltagesraw := strings.Split(strings.Trim(p[2], "{}"), ",")
 	joltages := make([]int, len(joltagesraw))
 	for i, jstr := range joltagesraw {
 		j, _ := strconv.Atoi(jstr)
@@ -120,7 +95,7 @@ func ParseMachine(s string) Machine {
 	}
 
 	return Machine{
-		target:   t,
+		target:   target,
 		buttons:  buttons,
 		joltages: joltages,
 	}
@@ -136,10 +111,13 @@ func ParseInput(i string) []Machine {
 }
 
 func Part1(machines []Machine) int {
+	// var observable = []Result{}
+
 	var steps = 0
 	for _, m := range machines {
 		s := findfastestsolution(m)
-		steps += len(s)
+		// observable = append(observable, Result{&m, s})
+		steps += len(s.presses)
 	}
 
 	return steps
