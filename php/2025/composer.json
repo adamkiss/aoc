@@ -10,7 +10,8 @@
 	],
 	"require": {
 		"php": ">=8.0.0",
-		"adamkiss/toolkit": "^0.1.6"
+		"adamkiss/toolkit": "^0.1.6",
+		"markrogoyski/math-php": "^2.13"
 	},
 	"autoload": {
 		"files": [

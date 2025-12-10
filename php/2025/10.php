@@ -15,6 +15,7 @@ INPUT;
 class Machine {
 	public int $target = -1;
 	public array $buttons = [];
+	public array $buttons_raw = [];
 	public array $joltages = [];
 
 	public function __construct(string $s) {
@@ -38,6 +39,7 @@ class Machine {
 			foreach ($bits as $bit) {
 				$button += 1 << (int)$bit;
 			}
+			$this->buttons_raw [] = A::map($bits, intval(...));
 			$this->buttons[] = $button;
 		}
 	}
@@ -71,6 +73,61 @@ class Machine {
 		echo "Didn't reach total for a machine in 10 000 steps, exiting.\n";
 		die(1);
 	}
+
+	/*
+	 * EXAMPLE
+	 * FROM
+	 * [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}
+	 *
+	 * INPUT:
+	 * min: +C1 +C2 +C3 +C4;
+	 * +C1 +C2 +C3 = 10;
+	 * +C1 +C3 +C4 = 11;
+	 * +C1 +C3 +C4 = 11;
+	 * +C1 +C2 = 5;
+	 * +C1 +C2 +C3 = 10;
+	 * +C3 = 5;
+	 * C1 <= 200;
+	 * C2 <= 200;
+	 * C3 <= 200;
+	 * C4 <= 200;
+	 * int C1,C2,C3,C4;
+	 */
+	public function match_joltages_steps(): int {
+		$input_cs = [];
+		$input_buttons = [];
+		foreach ($this->joltages as $i => $j) {
+			$input_cs [] = 'C' . ($i + 1);
+			$input_buttons[$i] = [];
+		}
+		foreach ($this->buttons_raw as $i => $b) {
+			foreach ($b as $_ => $register) {
+				$input_buttons[$register][] = $i + 1;
+			}
+		}
+
+		$input = sprintf(<<<INPUT
+			min: +%s;
+			%s
+			%s
+			int %s;
+			INPUT,
+			A::join($input_cs, ' +'),
+			A::join(array_map(function($b, $i) {
+				return sprintf(
+					'+C%s = %d;',
+					A::join($b, ' +C'),
+					$this->joltages[$i]
+				);
+			}, $input_buttons, array_keys($input_buttons)), "\n"),
+			A::join(A::map($input_cs, fn($c) => "{$c} <= 400;"), "\n"),
+			A::join($input_cs, ',')
+		);
+		$output = shell_exec("echo \"$input\" | lp_solve -S2");
+		$cs = Str::matchAll($output, '/^C(\d+)\s*(\d+)$/m', );
+		$output = array_sum(A::map($cs[2] ?? [], intval(...)));
+		return $output;
+	}
 }
 
 /**
@@ -82,8 +139,9 @@ function part1(array $machines) {
 	return $total;
 }
 
-function part2(string $input) {
-	return true;
+function part2(array $machines) {
+	$total = array_reduce($machines, fn ($c, $m) => $c + $m->match_joltages_steps(), 0);
+	return $total;
 }
 
 $s = microtime(true);
@@ -105,14 +163,14 @@ println('1) Result of real input: ' . part1($machines_input));
 printf("» %.3fms\n", (microtime(true) - $p) * 1000);
 
 // 2
-// $p = microtime(true);
-// $r = part2($input_demo);
-// println('2) Result of demo: ' . $r);
-// printf("» %.3fms\n", (microtime(true)-$p) * 1000);
-// assert($r === 1);
-//
-// $p = microtime(true);
-// println('2) Result of real input: ' . part2($input));
-// printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+$p = microtime(true);
+$r = part2($machines_demo);
+println('2) Result of demo: ' . $r);
+printf("» %.3fms\n", (microtime(true)-$p) * 1000);
+assert($r === 33);
+
+$p = microtime(true);
+println('2) Result of real input: ' . part2($machines_input));
+printf("» %.3fms\n", (microtime(true)-$p) * 1000);
 
 printf("TOTAL: %.3fms\n", (microtime(true) - $s) * 1000);
