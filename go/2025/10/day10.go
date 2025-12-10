@@ -33,34 +33,26 @@ type PressResult struct {
 	presses []*Button
 }
 
-type Result struct {
-	machine *Machine
-	result  PressResult
-}
-
-func findfastestsolution(m Machine) PressResult {
-	q := []PressResult{{0, []*Button{}}}
-	// for _, b := range m.buttons {
-	// 	q = append(q, PressResult{0 ^ b.val, []*Button{&b}})
-	// }
+func findfastestsolution(m Machine) int {
+	q := map[int]bool{0: true}
 
 	iterations := 0
 	for {
 		iterations++
 
-		nq := []PressResult{}
-		for _, r := range q {
+		nq := map[int]bool{}
+		for val, _ := range q {
 			for _, b := range m.buttons {
-				npr := PressResult{r.result ^ b.val, append(r.presses, &b)}
-				if npr.result == m.target {
-					return npr
+				pressres := val ^ b.val
+				if pressres == m.target {
+					return iterations
 				}
-				nq = append(nq, npr)
+				nq[pressres] = true
 			}
 		}
 		q = nq
 
-		if iterations == 1_000_000 {
+		if iterations == 10_000 {
 			panic("Million iterations reached, probably dead end.")
 		}
 	}
@@ -116,8 +108,7 @@ func Part1(machines []Machine) int {
 	var steps = 0
 	for _, m := range machines {
 		s := findfastestsolution(m)
-		// observable = append(observable, Result{&m, s})
-		steps += len(s.presses)
+		steps += s
 	}
 
 	return steps
