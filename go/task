@@ -16,6 +16,10 @@ run () { #: run a day's code
     go run "$YEAR/$DAY/day$DAY.go"
 }
 
+run-25-10 () {
+	CGO_CFLAGS="-I/opt/homebrew/opt/lp_solve/include" CGO_LDFLAGS="-L/opt/homebrew/opt/lp_solve/lib" go run 2025/10/day10.go
+}
+
 #
 # BOILERPLATE
 #

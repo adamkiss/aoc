@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/adamkiss/aoc/go/utils"
+	"github.com/draffensperger/golp"
 )
 
 var input string = utils.ReadInput("10")
@@ -19,6 +21,7 @@ var inputdemo string = `
 type Button struct {
 	raw   string
 	index int
+	bits  []int
 	val   int
 }
 
@@ -26,36 +29,6 @@ type Machine struct {
 	target   int
 	buttons  []Button
 	joltages []int
-}
-
-type PressResult struct {
-	result  int
-	presses []*Button
-}
-
-func findfastestsolution(m Machine) int {
-	q := map[int]bool{0: true}
-
-	iterations := 0
-	for {
-		iterations++
-
-		nq := map[int]bool{}
-		for val, _ := range q {
-			for _, b := range m.buttons {
-				pressres := val ^ b.val
-				if pressres == m.target {
-					return iterations
-				}
-				nq[pressres] = true
-			}
-		}
-		q = nq
-
-		if iterations == 10_000 {
-			panic("Million iterations reached, probably dead end.")
-		}
-	}
 }
 
 func ParseMachine(s string) Machine {
@@ -70,16 +43,23 @@ func ParseMachine(s string) Machine {
 
 	buttons := []Button{}
 	for i, btnstr := range p[1 : len(p)-1] {
-		bits := strings.Split(strings.Trim(btnstr, "()"), ",")
+		bitsstr := strings.Split(strings.Trim(btnstr, "()"), ",")
 		btnval := 0
-		for _, bitstr := range bits {
+		bits := make([]int, len(bitsstr))
+		for i, bitstr := range bitsstr {
 			bit, _ := strconv.Atoi(bitstr)
+			bits[i] = bit
 			btnval += 1 << bit
 		}
-		buttons = append(buttons, Button{btnstr, i, btnval})
+		buttons = append(buttons, Button{
+			raw:   btnstr,
+			val:   btnval,
+			index: i,
+			bits:  bits,
+		})
 	}
 
-	joltagesraw := strings.Split(strings.Trim(p[2], "{}"), ",")
+	joltagesraw := strings.Split(strings.Trim(p[len(p)-1], "{}"), ",")
 	joltages := make([]int, len(joltagesraw))
 	for i, jstr := range joltagesraw {
 		j, _ := strconv.Atoi(jstr)
@@ -102,20 +82,91 @@ func ParseInput(i string) []Machine {
 	return m
 }
 
-func Part1(machines []Machine) int {
-	// var observable = []Result{}
+func machineTurnOn(m Machine) int {
+	q := map[int]bool{0: true}
 
-	var steps = 0
-	for _, m := range machines {
-		s := findfastestsolution(m)
-		steps += s
+	iterations := 0
+	for {
+		iterations++
+
+		nq := map[int]bool{}
+		for val := range q {
+			for _, b := range m.buttons {
+				pressres := val ^ b.val
+				if pressres == m.target {
+					return iterations
+				}
+				nq[pressres] = true
+			}
+		}
+		q = nq
+
+		if iterations == 10_000 {
+			panic("Million iterations reached, probably dead end.")
+		}
 	}
-
-	return steps
 }
 
-func Part2(i string) int {
-	return 2
+func machineJoltage(m Machine) int {
+	nrb := len(m.buttons)
+	nrj := len(m.joltages)
+
+	lp := golp.NewLP(0, nrb)
+	lp.SetVerboseLevel(golp.NEUTRAL)
+
+	objcoeffs := make([]float64, nrb)
+	for i := range nrb {
+		objcoeffs[i] = 1.0
+		lp.SetInt(i, true)
+		lp.SetBounds(i, 0.0, float64(200))
+	}
+	lp.SetObjFn(objcoeffs)
+
+	for i := range nrj {
+		var entries []golp.Entry
+		for j, btn := range m.buttons {
+			if slices.Contains(btn.bits, i) {
+				entries = append(entries, golp.Entry{Col: j, Val: 1.0})
+			}
+		}
+		targetValue := float64(m.joltages[i])
+		if err := lp.AddConstraintSparse(entries, golp.EQ, targetValue); err != nil {
+			panic(err)
+		}
+	}
+
+	status := lp.Solve()
+	if status != golp.OPTIMAL {
+		panic("lp.Solve() status isnt optimal, but " + status.String())
+	}
+
+	solution := lp.Variables()
+	presses := 0
+	for _, val := range solution {
+		presses += int(val + .5)
+	}
+
+	return presses
+}
+
+func Part1(machines []Machine) int {
+	var presses = 0
+	for _, m := range machines {
+		p := machineTurnOn(m)
+		presses += p
+	}
+
+	return presses
+}
+
+func Part2(machines []Machine) int {
+	presses := 0
+	for _, m := range machines {
+		p := machineJoltage(m)
+		presses += p
+	}
+
+	return presses
 }
 
 func main() {
@@ -144,14 +195,14 @@ func main() {
 	//
 	start2 := time.Now()
 
-	// var r2 int
-	// demo2expected := 2
-	// r2 = Part2(inputdemo)
-	// if r2 != demo2expected {
-	// 	panic(fmt.Sprintf("Part 2 demo failed: %d, expected %d", r2, demo2expected))
-	// }
-	// r2 = Part2(input)
-	// fmt.Printf("Part 2: %d\n", r2)
+	var r2 int
+	demo2expected := 33
+	r2 = Part2(machinesd)
+	if r2 != demo2expected {
+		panic(fmt.Sprintf("Part 2 demo failed: %d, expected %d", r2, demo2expected))
+	}
+	r2 = Part2(machinesi)
+	fmt.Printf("Part 2: %d\n", r2)
 
 	p02time := time.Since(start2)
 
