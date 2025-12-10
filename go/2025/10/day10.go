@@ -146,6 +146,9 @@ func machineJoltage(m Machine) int {
 		presses += int(val + .5)
 	}
 
+	// output the math for cli lp
+	// fmt.Println(lp.WriteToString())
+
 	return presses
 }
 
