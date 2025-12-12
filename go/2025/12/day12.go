@@ -10,6 +10,7 @@ import (
 )
 
 var input string = utils.ReadInput("12")
+var inputbytes []byte = utils.ReadInputBytes("12")
 var inputdemo string = `
 0:
 ###
@@ -45,6 +46,7 @@ var inputdemo string = `
 12x5: 1 0 1 0 2 2
 12x5: 1 0 1 0 3 2
 `
+var inputdemobytes []byte = []byte(inputdemo)
 
 type Shape struct {
 	area int
@@ -78,6 +80,10 @@ func Parse(i string) (s []Shape, t []Target) {
 	return
 }
 
+func ParseBytes(i string) (s []Shape, t []Target) {
+	return
+}
+
 func atoi(s string) int {
 	i, _ := strconv.Atoi(s)
 	return i
@@ -96,10 +102,6 @@ func Part1(shapes []Shape, targets []Target) int {
 		}
 	}
 	return pass
-}
-
-func Part2(i string) int {
-	return 2
 }
 
 func main() {
